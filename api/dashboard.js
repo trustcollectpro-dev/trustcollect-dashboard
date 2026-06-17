@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'GET');
 
     const { id } = req.query;
-    if (!id) return res.status(400).json({ error: 'ID client manquant' });
+    if (!id) return res.status(400).json({ error: 'ID clent manquant' });
 
     const token = process.env.AIRTABLE_TOKEN;
     if (!token) return res.status(500).json({ error: 'Token Airtable non configure' });
@@ -55,11 +55,11 @@ module.exports = async function handler(req, res) {
         return res.status(200).json({
             client: {
                 id: clientData.id,
-                name: f['Name'] || '',
+                name: f['Nom'] || '',
                 email: f['Email'] || '',
                 plan: f['Plan'] || '',
                 statut: f['Statut'] || '',
-                dateInscription: f["Date D'inscription"] || null,
+                dateInscription: f['Date inscription'] || null,
             },
             avis,
         });
