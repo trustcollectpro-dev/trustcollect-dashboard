@@ -15,48 +15,56 @@ module.exports = async function handler(req, res) {
     const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
 
     try {
-          const clientRes = await fetch(
-                  `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${CLIENTS_TABLE}/${id}`,
+        const clientRes = await fetch(
+            `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${CLIENTS_TABLE}/${id}`,
             { headers }
-                );
-          if (!clientRes.ok) return res.status(404).json({ error: 'Client introuvable' });
+        );
 
-          const clientData = await clientRes.json();
-          const f = clientData.fields;
-          const avisIds = f['Avis'] || [];
-          let avis = [];
+        if (!clientRes.ok) {
+            const body = await clientRes.json().catch(() => clientRes.text());
+            console.error('[dashboard] Airtable error', clientRes.status, JSON.stringify(body));
+            return res.status(404).json({
+                error: 'Client introuvable',
+                debug: { airtableStatus: clientRes.status, airtableBody: body }
+            });
+        }
 
-          if (avisIds.length > 0) {
-                  const formula = `OR(${avisIds.map((rid) => `RECORD_ID()="${rid}"`).join(',')})`;
-                  const avisRes = await fetch(
-                            `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AVIS_TABLE}?filterByFormula=${encodeURIComponent(formula)}&sort[0][field]=Date%20de%20r%C3%A9ception&sort[0][direction]=desc`,
-                    { headers }
-                          );
-                  const avisData = await avisRes.json();
-                  avis = (avisData.records || []).map((a) => ({
-                            id: a.id,
-                            nom: a.fields['Nom du client final'] || 'Anonyme',
-                            note: a.fields['Note ( 1 a 5 )'] || null,
-                            avis: a.fields['Avis reformule IA'] || a.fields['Avis brut'] || '',
-                            date: a.fields['Date de reception'] || null,
-                            statut: a.fields['Statut'] || null,
-                            affiche: a.fields['Affiche sur le widget'] || false,
-                  }));
-          }
+        const clientData = await clientRes.json();
+        const f = clientData.fields;
+        const avisIds = f['Avis'] || [];
+        let avis = [];
 
-          return res.status(200).json({
-                  client: {
-                            id: clientData.id,
-                            name: f['Name'] || '',
-                            email: f['Email'] || '',
-                            plan: f['Plan'] || '',
-                            statut: f['Statut'] || '',
-                            dateInscription: f["Date D'inscription"] || null,
-                  },
-                          avis,
-          });
+        if (avisIds.length > 0) {
+            const formula = `OR(${avisIds.map((rid) => `RECORD_ID()="${rid}"`).join(',')})`;
+            const avisRes = await fetch(
+                `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AVIS_TABLE}?filterByFormula=${encodeURIComponent(formula)}&sort[0][field]=Date%20de%20r%C3%A9ception&sort[0][direction]=desc`,
+                { headers }
+            );
+            const avisData = await avisRes.json();
+            avis = (avisData.records || []).map((a) => ({
+                id: a.id,
+                nom: a.fields['Nom du client final'] || 'Anonyme',
+                note: a.fields['Note ( 1 a 5 )'] || null,
+                avis: a.fields['Avis reformule IA'] || a.fields['Avis brut'] || '',
+                date: a.fields['Date de reception'] || null,
+                statut: a.fields['Statut'] || null,
+                affiche: a.fields['Affiche sur le widget'] || false,
+            }));
+        }
+
+        return res.status(200).json({
+            client: {
+                id: clientData.id,
+                name: f['Name'] || '',
+                email: f['Email'] || '',
+                plan: f['Plan'] || '',
+                statut: f['Statut'] || '',
+                dateInscription: f["Date D'inscription"] || null,
+            },
+            avis,
+        });
     } catch (err) {
-          console.error(err);
-          return res.status(500).json({ error: 'Erreur serveur' });
+        console.error('[dashboard] Uncaught error:', err);
+        return res.status(500).json({ error: 'Erreur serveur', debug: { message: err.message } });
     }
 };
