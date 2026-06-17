@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TrustCollect – Mon Dashboard</title>
+  <title>TrustCollect — Mon Dashboard</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -14,7 +14,7 @@
       min-height: 100vh;
     }
 
-    /* ── HEADER ── */
+    /* — HEADER — */
     header {
       background: #4F46E5;
       color: #fff;
@@ -24,356 +24,243 @@
       gap: 12px;
       box-shadow: 0 2px 12px rgba(79,70,229,.25);
     }
-    header .logo {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -.3px;
-    }
+    header .logo { font-size: 22px; font-weight: 700; letter-spacing: -.5px; }
     header .logo span { color: #A5B4FC; }
-    header .badge {
-      margin-left: auto;
-      background: rgba(255,255,255,.15);
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-size: 13px;
+
+    /* — MAIN — */
+    main {
+      max-width: 860px;
+      margin: 40px auto;
+      padding: 0 20px 60px;
     }
 
-    /* ── LOADING / ERROR ── */
-    #loading, #error {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 60vh;
-      gap: 16px;
-      color: #6B7280;
+    /* — LOADING / ERROR — */
+    .state-msg {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6b7280;
+      font-size: 16px;
     }
-    .spinner {
-      width: 40px; height: 40px;
-      border: 3px solid #E0E7FF;
-      border-top-color: #4F46E5;
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #error { color: #EF4444; }
-    #error svg { width: 48px; height: 48px; }
+    .state-msg.error { color: #dc2626; }
 
-    /* ── MAIN ── */
-    main { max-width: 860px; margin: 0 auto; padding: 32px 20px 60px; }
-
-    .welcome {
-      margin-bottom: 28px;
-    }
-    .welcome h1 { font-size: 26px; font-weight: 700; }
-    .welcome p { color: #6B7280; margin-top: 4px; font-size: 15px; }
-
-    /* ── STATS ── */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
+    /* — CLIENT CARD — */
+    .client-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 32px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.07);
       margin-bottom: 32px;
     }
-    .stat-card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 20px 24px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.07);
+    .client-card h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
-    .stat-card .label { font-size: 13px; color: #9CA3AF; margin-bottom: 6px; }
-    .stat-card .value { font-size: 32px; font-weight: 700; color: #4F46E5; }
-    .stat-card .sub { font-size: 13px; color: #6B7280; margin-top: 2px; }
-
-    /* ── WIDGET SECTION ── */
-    .section {
-      background: #fff;
-      border-radius: 14px;
-      padding: 24px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.07);
-      margin-bottom: 24px;
+    .client-card .email {
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 20px;
     }
-    .section h2 {
-      font-size: 16px;
+    .meta-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
       font-weight: 600;
-      margin-bottom: 14px;
+    }
+    .badge-plan  { background: #EEF2FF; color: #4F46E5; }
+    .badge-actif { background: #DCFCE7; color: #15803d; }
+    .badge-essai { background: #FEF9C3; color: #854d0e; }
+    .badge-inactif { background: #FEE2E2; color: #dc2626; }
+    .badge-date  { background: #F3F4F6; color: #6b7280; }
+
+    /* — AVIS SECTION — */
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .section h2 .icon {
-      width: 28px; height: 28px;
-      background: #EEF2FF;
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px;
-    }
-
-    .widget-code {
-      background: #1E1B4B;
-      color: #A5B4FC;
-      border-radius: 10px;
-      padding: 16px 18px;
-      font-family: 'Courier New', monospace;
-      font-size: 13px;
-      word-break: break-all;
-      position: relative;
-    }
-    .copy-btn {
-      position: absolute;
-      top: 10px; right: 10px;
+    .section-title .count {
       background: #4F46E5;
       color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 5px 12px;
       font-size: 12px;
-      cursor: pointer;
-      transition: background .2s;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
     }
-    .copy-btn:hover { background: #4338CA; }
-    .copy-btn.copied { background: #10B981; }
 
-    /* ── REVIEWS ── */
-    .review-card {
-      border: 1px solid #E5E7EB;
-      border-radius: 12px;
-      padding: 18px 20px;
-      margin-bottom: 14px;
-      transition: box-shadow .2s;
-    }
-    .review-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,.08); }
-
-    .review-top {
+    .avis-list {
       display: flex;
-      align-items: flex-start;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .avis-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px 24px;
+      box-shadow: 0 1px 8px rgba(0,0,0,.06);
+      border-left: 4px solid #4F46E5;
+    }
+    .avis-header {
+      display: flex;
+      align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    .reviewer-name { font-weight: 600; font-size: 15px; }
-    .review-date { font-size: 12px; color: #9CA3AF; }
-
-    .stars { color: #F59E0B; font-size: 18px; letter-spacing: 1px; }
-    .stars .empty { color: #E5E7EB; }
-
-    .review-text { font-size: 14px; color: #4B5563; line-height: 1.6; margin-top: 8px; }
-
-    .review-badges { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-    .badge {
+    .avis-nom { font-weight: 600; font-size: 15px; }
+    .stars { color: #F59E0B; font-size: 16px; letter-spacing: 1px; }
+    .avis-text {
+      color: #374151;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .avis-footer {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .avis-date { color: #9ca3af; font-size: 12px; }
+    .avis-statut {
       font-size: 11px;
+      font-weight: 700;
       padding: 3px 10px;
-      border-radius: 20px;
-      font-weight: 500;
+      border-radius: 999px;
     }
-    .badge-green { background: #D1FAE5; color: #065F46; }
-    .badge-yellow { background: #FEF3C7; color: #92400E; }
-    .badge-gray { background: #F3F4F6; color: #6B7280; }
-    .badge-widget { background: #EEF2FF; color: #4338CA; }
+    .statut-approuve { background: #DCFCE7; color: #15803d; }
+    .statut-attente  { background: #FEF9C3; color: #92400e; }
+    .statut-refuse   { background: #FEE2E2; color: #dc2626; }
 
     .empty-avis {
       text-align: center;
-      color: #9CA3AF;
-      padding: 40px 20px;
-      font-size: 15px;
+      padding: 40px;
+      color: #9ca3af;
+      font-size: 14px;
+      background: #fff;
+      border-radius: 14px;
     }
-    .empty-avis .emoji { font-size: 40px; margin-bottom: 12px; }
-
-    /* ── FOOTER ── */
-    footer {
-      text-align: center;
-      color: #9CA3AF;
-      font-size: 13px;
-      margin-top: 40px;
-    }
-    footer a { color: #4F46E5; text-decoration: none; }
-
-    #dashboard { display: none; }
   </style>
 </head>
 <body>
+  <header>
+    <div class="logo">Trust<span>Collect</span></div>
+    <span style="opacity:.6;font-size:14px;">— Mon Dashboard</span>
+  </header>
 
-<header>
-  <div class="logo">Trust<span>Collect</span></div>
-  <div class="badge" id="plan-badge"></div>
-</header>
+  <main>
+    <div id="app"><div class="state-msg">Chargement…</div></div>
+  </main>
 
-<div id="loading">
-  <div class="spinner"></div>
-  <p>Chargement de votre dashboard…</p>
-</div>
-
-<div id="error" style="display:none">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r=".5" fill="currentColor"/>
-  </svg>
-  <p id="error-msg">Lien invalide ou expiré.</p>
-</div>
-
-<main id="dashboard">
-  <div class="welcome">
-    <h1>Bonjour, <span id="client-name">…</span> 👋</h1>
-    <p>Voici le récapitulatif de vos avis clients TrustCollect.</p>
-  </div>
-
-  <div class="stats">
-    <div class="stat-card">
-      <div class="label">Avis reçus</div>
-      <div class="value" id="stat-total">0</div>
-      <div class="sub">au total</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Note moyenne</div>
-      <div class="value" id="stat-avg">–</div>
-      <div class="sub">sur 5</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">Sur le widget</div>
-      <div class="value" id="stat-widget">0</div>
-      <div class="sub">avis affichés</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2><span class="icon">🧩</span> Votre widget de confiance</h2>
-    <p style="font-size:14px;color:#6B7280;margin-bottom:14px">
-      Copiez ce code et collez-le sur votre site pour afficher vos avis en temps réel.
-    </p>
-    <div class="widget-code" id="widget-code-block">
-      <button class="copy-btn" onclick="copyWidget(this)">Copier</button>
-      <span id="widget-snippet"></span>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2><span class="icon">⭐</span> Vos avis clients</h2>
-    <div id="avis-list"></div>
-  </div>
-
-  <footer>
-    Propulsé par <a href="#">TrustCollect</a> · Des questions ? <a href="mailto:hello@trustcollect.fr">Contactez-nous</a>
-  </footer>
-</main>
-
-<script>
-  const STARS = (n) => {
-    if (!n) return '';
-    let s = '';
-    for (let i = 1; i <= 5; i++) {
-      s += i <= n ? '★' : '<span class="empty">★</span>';
-    }
-    return `<div class="stars">${s}</div>`;
-  };
-
-  const fmtDate = (iso) => {
-    if (!iso) return '';
-    return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-  };
-
-  async function load() {
+  <script>
     const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    const clientId = params.get('id');
 
-    if (!id) {
-      showError('Aucun identifiant client fourni dans le lien.');
-      return;
+    function stars(n) {
+      if (!n) return '';
+      const full = Math.round(n);
+      return '★'.repeat(full) + '☆'.repeat(Math.max(0, 5 - full));
     }
 
-    try {
-      const res = await fetch(`/api/dashboard?id=${encodeURIComponent(id)}`);
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        showError(data.error || 'Client introuvable.');
+    function formatDate(d) {
+      if (!d) return '';
+      const dt = new Date(d);
+      if (isNaN(dt)) return d;
+      return dt.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+    }
+
+    function statutBadgeClass(s) {
+      if (!s) return '';
+      const l = s.toLowerCase();
+      if (l.includes('actif') && !l.includes('in')) return 'badge-actif';
+      if (l.includes('essai')) return 'badge-essai';
+      return 'badge-inactif';
+    }
+
+    function avisBadgeClass(s) {
+      if (!s) return '';
+      const l = s.toLowerCase();
+      if (l.includes('approu')) return 'statut-approuve';
+      if (l.includes('refus')) return 'statut-refuse';
+      return 'statut-attente';
+    }
+
+    async function load() {
+      const app = document.getElementById('app');
+
+      if (!clientId) {
+        app.innerHTML = '<div class="state-msg error">⚠️ Aucun identifiant client fourni dans l\'URL.<br><small>Ajoutez <code>?id=recXXXXXXXX</code></small></div>';
         return;
       }
 
-      const { client, avis } = await res.json();
-      render(client, avis);
-    } catch (e) {
-      showError('Impossible de contacter le serveur. Réessayez dans quelques instants.');
-    }
-  }
+      try {
+        const res = await fetch('/api/dashboard?id=' + encodeURIComponent(clientId));
+        const data = await res.json();
 
-  function showError(msg) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('error').style.display = 'flex';
-    document.getElementById('error-msg').textContent = msg;
-  }
+        if (!res.ok) {
+          app.innerHTML = '<div class="state-msg error">Erreur : ' + (data.error || 'Client introuvable') + '</div>';
+          return;
+        }
 
-  function render(client, avis) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
+        const c = data.client;
+        const avis = data.avis || [];
 
-    // Header badge
-    const planBadge = document.getElementById('plan-badge');
-    planBadge.textContent = client.plan ? `Plan ${client.plan}` : '';
+        const avisHtml = avis.length === 0
+          ? '<div class="empty-avis">Aucun avis pour le moment.</div>'
+          : avis.map(a => `
+              <div class="avis-card">
+                <div class="avis-header">
+                  <span class="avis-nom">${escHtml(a.nom)}</span>
+                  <span class="stars">${stars(a.note)}</span>
+                </div>
+                <p class="avis-text">${escHtml(a.avis || '')}</p>
+                <div class="avis-footer">
+                  ${a.date ? '<span class="avis-date">' + formatDate(a.date) + '</span>' : ''}
+                  ${a.statut ? '<span class="avis-statut ' + avisBadgeClass(a.statut) + '">' + escHtml(a.statut) + '</span>' : ''}
+                </div>
+              </div>
+            `).join('');
 
-    // Welcome
-    document.getElementById('client-name').textContent = client.name || client.email;
-
-    // Stats
-    const total = avis.length;
-    const noted = avis.filter(a => a.note);
-    const avg = noted.length ? (noted.reduce((s, a) => s + a.note, 0) / noted.length).toFixed(1) : '–';
-    const widgetCount = avis.filter(a => a.affiche).length;
-
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-avg').textContent = avg;
-    document.getElementById('stat-widget').textContent = widgetCount;
-
-    // Widget snippet
-    const snippet = `<script src="https://widget.trustcollect.fr/widget.js?id=${client.id}"><\/script>`;
-    document.getElementById('widget-snippet').textContent = snippet;
-
-    // Reviews
-    const list = document.getElementById('avis-list');
-    if (avis.length === 0) {
-      list.innerHTML = `
-        <div class="empty-avis">
-          <div class="emoji">📭</div>
-          <p>Aucun avis reçu pour le moment.<br>Partagez votre lien Tally avec vos clients !</p>
-        </div>`;
-    } else {
-      list.innerHTML = avis.map(a => `
-        <div class="review-card">
-          <div class="review-top">
-            <div>
-              <div class="reviewer-name">${escHtml(a.nom)}</div>
-              <div class="review-date">${fmtDate(a.date)}</div>
+        app.innerHTML = `
+          <div class="client-card">
+            <h2>${escHtml(c.name || 'Client')}</h2>
+            <p class="email">${escHtml(c.email || '')}</p>
+            <div class="meta-row">
+              ${c.plan ? '<span class="badge badge-plan">📦 ' + escHtml(c.plan) + '</span>' : ''}
+              ${c.statut ? '<span class="badge ' + statutBadgeClass(c.statut) + '">' + escHtml(c.statut) + '</span>' : ''}
+              ${c.dateInscription ? '<span class="badge badge-date">📅 Inscrit le ' + formatDate(c.dateInscription) + '</span>' : ''}
             </div>
-            ${STARS(a.note)}
           </div>
-          ${a.avis ? `<div class="review-text">"${escHtml(a.avis)}"</div>` : ''}
-          <div class="review-badges">
-            ${a.statut ? `<span class="badge ${statutBadge(a.statut)}">${a.statut}</span>` : ''}
-            ${a.affiche ? `<span class="badge badge-widget">✓ Sur le widget</span>` : ''}
+
+          <div class="section-title">
+            Avis reçus
+            <span class="count">${avis.length}</span>
           </div>
-        </div>
-      `).join('');
+          <div class="avis-list">${avisHtml}</div>
+        `;
+
+      } catch (err) {
+        document.getElementById('app').innerHTML = '<div class="state-msg error">Erreur réseau : ' + escHtml(err.message) + '</div>';
+      }
     }
-  }
 
-  function statutBadge(s) {
-    if (!s) return 'badge-gray';
-    const sl = s.toLowerCase();
-    if (sl.includes('valid') || sl.includes('publié') || sl.includes('approuv')) return 'badge-green';
-    if (sl.includes('attente') || sl.includes('review')) return 'badge-yellow';
-    return 'badge-gray';
-  }
+    function escHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
-  function escHtml(str) {
-    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function copyWidget(btn) {
-    const snippet = document.getElementById('widget-snippet').textContent;
-    navigator.clipboard.writeText(snippet).then(() => {
-      btn.textContent = '✓ Copié !';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
-    });
-  }
-
-  load();
-</script>
+    load();
+  </script>
 </body>
 </html>
