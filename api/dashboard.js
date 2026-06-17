@@ -1,6 +1,6 @@
-const AIRTABLE_BASE_ID = 'appW2cwe9rGgeXDwN';
-const CLIENTS_TABLE = 'tblw3sHss5WLvF3W2';
-const AVIS_TABLE = 'tblrXz0h0NLTN4zgg';
+const AIRTABLE_BASE_ID = 'appNfQrr0JMJ7pJox';
+const CLIENTS_TABLE = 'tblJWLkDDScUtaMU8';
+const AVIS_TABLE = 'tblsZq7vxacMEhIZv';
 
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
