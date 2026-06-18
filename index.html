@@ -57,7 +57,7 @@
     overflow: hidden;
   }
 
-  /* ---------------- Sidebar ---------------- */
+  /* ── Sidebar ── */
   .rail {
     background: var(--rail);
     color: var(--rail-ink);
@@ -65,20 +65,15 @@
     flex-direction: column;
     border-right: 1px solid var(--rail-line);
   }
-
   .rail-brand {
-    display: flex;
-    align-items: center;
-    gap: 9px;
+    display: flex; align-items: center; gap: 9px;
     padding: 18px 18px 16px;
     border-bottom: 1px solid var(--rail-line);
   }
   .rail-mark {
-    width: 26px; height: 26px;
-    border-radius: 6px;
+    width: 26px; height: 26px; border-radius: 6px;
     background: linear-gradient(160deg, #9A8BFF, #6D5EF5);
-    display: grid; place-items: center;
-    flex: none;
+    display: grid; place-items: center; flex: none;
     box-shadow: inset 0 1px 0 rgba(255,255,255,.25);
   }
   .rail-mark svg { width: 15px; height: 15px; display: block; }
@@ -86,11 +81,8 @@
   .rail-word b { color: #9A8BFF; font-weight: 600; }
 
   .biz {
-    padding: 16px 18px;
-    border-bottom: 1px solid var(--rail-line);
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
+    padding: 16px 18px; border-bottom: 1px solid var(--rail-line);
+    display: flex; flex-direction: column; gap: 11px;
   }
   .biz-head { display: flex; align-items: center; gap: 10px; }
   .biz-avatar {
@@ -113,7 +105,7 @@
   }
   .dot-live { width: 6px; height: 6px; border-radius: 50%; background: #34C77B; box-shadow: 0 0 0 3px rgba(52,199,123,.18); }
 
-  nav.rail-nav { padding: 12px 12px; flex: 1; }
+  nav.rail-nav { padding: 12px; flex: 1; overflow-y: auto; }
   .nav-label {
     font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
     color: #5C6573; padding: 8px 8px 6px; font-weight: 600;
@@ -123,7 +115,8 @@
     padding: 8px 10px; border-radius: var(--radius);
     color: var(--rail-ink); font-size: 13px; font-weight: 500;
     cursor: pointer; user-select: none; position: relative;
-    text-decoration: none;
+    text-decoration: none; border: 0; background: none; width: 100%; text-align: left;
+    font-family: inherit;
   }
   .nav-item svg { width: 16px; height: 16px; flex: none; opacity: .8; }
   .nav-item:hover { background: var(--rail-2); color: #fff; }
@@ -144,8 +137,8 @@
   }
   .rail-foot a { color: #9A8BFF; text-decoration: none; font-weight: 500; }
 
-  /* ---------------- Main ---------------- */
-  .main { overflow-y: auto; background: var(--canvas); }
+  /* ── Main ── */
+  .main { overflow-y: auto; background: var(--canvas); display: flex; flex-direction: column; }
 
   .topbar {
     position: sticky; top: 0; z-index: 5;
@@ -154,6 +147,7 @@
     border-bottom: 1px solid var(--line);
     padding: 16px 28px;
     display: flex; align-items: center; gap: 18px;
+    flex: none;
   }
   .topbar h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
   .crumb { font-size: 11px; color: var(--ink-4); letter-spacing: .04em; text-transform: uppercase; font-weight: 600; margin-bottom: 2px; }
@@ -183,6 +177,7 @@
   .btn svg { width: 15px; height: 15px; }
   .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
   .btn.primary:hover { background: var(--primary-ink); }
+  .btn.success { background: var(--green); border-color: var(--green); color: #0B0B10; }
 
   .content { padding: 24px 28px 56px; max-width: 1320px; }
 
@@ -268,8 +263,6 @@
   .cust-name { font-weight: 500; font-size: 13px; }
   .cust-handle { font-size: 11px; color: var(--ink-4); font-family: "IBM Plex Mono", monospace; }
   .rev-text { font-size: 12.5px; color: var(--ink-2); max-width: 420px; line-height: 1.5; }
-  td .src-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); }
-  td .src-tag svg { width: 13px; height: 13px; }
   .date { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink-3); white-space: nowrap; }
   .badge {
     display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500;
@@ -290,10 +283,9 @@
   .star-on { fill: var(--gold); }
   .star-off { fill: #33333F; }
 
-  /* Loading & error states */
+  /* Loading & error */
   .state-screen {
-    position: fixed; inset: 0;
-    background: var(--canvas);
+    position: fixed; inset: 0; background: var(--canvas);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     gap: 16px; z-index: 100;
@@ -301,35 +293,106 @@
   .state-screen.hidden { display: none; }
   .spinner {
     width: 36px; height: 36px;
-    border: 2px solid var(--line);
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
+    border: 2px solid var(--line); border-top-color: var(--primary);
+    border-radius: 50%; animation: spin .7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
   .state-title { font-size: 15px; font-weight: 600; color: var(--ink-2); }
   .state-sub { font-size: 13px; color: var(--ink-4); }
   .err-icon { font-size: 32px; }
 
-  /* Skeleton shimmer */
-  .sk {
-    background: linear-gradient(90deg, var(--line-2) 25%, #22222E 50%, var(--line-2) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s infinite;
-    border-radius: 4px;
+  /* Sections */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* Widget & info sections */
+  .info-block { padding: 24px 28px 56px; max-width: 860px; }
+  .info-block h2 { font-size: 17px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 8px; }
+  .info-block p { font-size: 13.5px; color: var(--ink-2); line-height: 1.65; }
+
+  .steps { display: flex; flex-direction: column; gap: 0; margin: 24px 0; }
+  .step {
+    display: flex; gap: 16px; padding: 20px 0;
+    border-bottom: 1px solid var(--line-2);
   }
-  @keyframes shimmer { to { background-position: -200% 0; } }
+  .step:last-child { border-bottom: 0; }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--primary-wash); border: 1px solid var(--primary);
+    display: grid; place-items: center; flex: none;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; color: var(--primary-ink);
+  }
+  .step-body h3 { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+  .step-body p { font-size: 13px; color: var(--ink-3); line-height: 1.6; }
+
+  .code-box {
+    background: var(--canvas); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 14px 16px;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--primary-ink);
+    word-break: break-all; line-height: 1.7; position: relative;
+    margin: 12px 0;
+  }
+  .code-box .copy-btn {
+    position: absolute; top: 10px; right: 10px;
+    font-size: 11px; padding: 4px 10px;
+  }
+
+  .link-box {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--canvas); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 12px 14px; margin: 16px 0;
+  }
+  .link-box span { flex: 1; font-family: "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--primary-ink); word-break: break-all; }
+
+  .qr-wrap { display: flex; gap: 32px; align-items: flex-start; padding: 24px 0; }
+  .qr-img { background: #fff; border-radius: 12px; padding: 12px; width: 180px; height: 180px; display: block; }
+  .qr-info h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .qr-info p { font-size: 13px; color: var(--ink-3); line-height: 1.6; max-width: 400px; }
+  .qr-info .btn { margin-top: 14px; }
+
+  .param-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 0; }
+  .param-card {
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 18px 20px;
+  }
+  .param-card .label { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-4); font-weight: 600; margin-bottom: 8px; }
+  .param-card .val { font-size: 15px; font-weight: 500; color: var(--ink); }
+  .param-card .val.mono { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--primary-ink); }
+  .param-card .hint { font-size: 12px; color: var(--ink-4); margin-top: 5px; }
+
+  .feature-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .feature-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; background: var(--paper);
+    border: 1px solid var(--line); border-radius: 8px;
+  }
+  .feature-row svg { width: 16px; height: 16px; flex: none; color: var(--green); }
+  .feature-row span { font-size: 13px; color: var(--ink-2); }
+
+  .preview-widget {
+    background: #fff; border-radius: 12px; padding: 20px;
+    display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+    max-width: 480px; margin: 20px 0;
+  }
+  .pw-card {
+    background: #f9f9fb; border: 1px solid #e8e8ef; border-radius: 8px;
+    padding: 12px 14px; min-width: 140px; flex: 1;
+  }
+  .pw-stars { display: flex; gap: 2px; margin-bottom: 6px; }
+  .pw-stars svg { width: 13px; height: 13px; fill: #F5B301; }
+  .pw-text { font-size: 11px; color: #444; line-height: 1.5; }
+  .pw-name { font-size: 10px; color: #999; margin-top: 6px; font-weight: 600; }
 </style>
 </head>
 <body>
 
-<!-- Loading screen -->
+<!-- Loading -->
 <div class="state-screen" id="loading">
   <div class="spinner"></div>
   <div class="state-title">Chargement de votre tableau de bord…</div>
 </div>
 
-<!-- Error screen -->
+<!-- Error -->
 <div class="state-screen hidden" id="error">
   <div class="err-icon">⚠️</div>
   <div class="state-title">Une erreur est survenue.</div>
@@ -337,7 +400,8 @@
 </div>
 
 <div class="app" id="app" style="display:none">
-  <!-- ============ SIDEBAR ============ -->
+
+  <!-- ══ SIDEBAR ══ -->
   <aside class="rail">
     <div class="rail-brand">
       <span class="rail-mark">
@@ -359,35 +423,31 @@
 
     <nav class="rail-nav">
       <div class="nav-label">Pilotage</div>
-      <a class="nav-item active">
+      <button class="nav-item active" onclick="showSection('overview')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
         Vue d'ensemble
-      </a>
-      <a class="nav-item">
+      </button>
+      <button class="nav-item" onclick="showSection('avis')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 17l-5.3 2.6 1-5.8L3.5 9.7l5.9-.9L12 3.5Z"/></svg>
         Avis <span class="count" id="nav-count">—</span>
-      </a>
-      <a class="nav-item">
+      </button>
+      <button class="nav-item" onclick="showSection('widget')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="14" rx="1.5"/><path d="M3 9h18M8 21h8"/></svg>
         Widget
-      </a>
-      <a class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12h8M4 7h12M4 17h6"/><circle cx="18" cy="16" r="3"/><path d="M18 13v-3M20.5 14.5 22 13"/></svg>
-        Diffusion
-      </a>
+      </button>
       <div class="nav-label" style="margin-top:8px">Collecte</div>
-      <a class="nav-item">
+      <button class="nav-item" onclick="showSection('demandes')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v11H7l-3 3V5Z"/><path d="M8 9h8M8 12h5"/></svg>
         Demandes d'avis
-      </a>
-      <a class="nav-item">
+      </button>
+      <button class="nav-item" onclick="showSection('qr')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="4" y="14" width="7" height="6" rx="1"/><rect x="14" y="4" width="6" height="16" rx="1"/></svg>
         QR &amp; supports
-      </a>
-      <a class="nav-item">
+      </button>
+      <button class="nav-item" onclick="showSection('parametres')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a7 7 0 0 0-1.7-1l-.3-2.5H9.4l-.3 2.5a7 7 0 0 0-1.7 1l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 1.7 1l.3 2.5h4.2l.3-2.5a7 7 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5c.1-.3.1-.7.1-1Z"/></svg>
         Paramètres
-      </a>
+      </button>
     </nav>
 
     <div class="rail-foot">
@@ -395,443 +455,688 @@
     </div>
   </aside>
 
-  <!-- ============ MAIN ============ -->
+  <!-- ══ MAIN ══ -->
   <main class="main">
     <div class="topbar">
       <div>
         <div class="crumb" id="topbar-crumb">…</div>
-        <h1>Vue d'ensemble</h1>
+        <h1 id="topbar-title">Vue d'ensemble</h1>
       </div>
       <div class="spacer"></div>
-      <div class="seg" id="period">
+      <div class="seg" id="period" style="display:none">
         <button>7 j</button>
         <button class="on">30 j</button>
         <button>90 j</button>
         <button>12 mois</button>
       </div>
-      <button class="btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
-        Exporter
-      </button>
-      <button class="btn primary">
+      <button class="btn primary" id="btn-demander" onclick="showSection('demandes')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
         Demander un avis
       </button>
     </div>
 
-    <div class="content">
-      <!-- KPIs -->
-      <section class="kpis">
-        <div class="kpi">
-          <div class="kpi-label">Avis collectés</div>
-          <div class="kpi-val mono" id="kpi-total">—</div>
-          <div class="kpi-sub" id="kpi-total-sub">—</div>
-          <svg class="spark" viewBox="0 0 64 26" preserveAspectRatio="none" id="spark-total"></svg>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Note moyenne</div>
-          <div class="kpi-val mono" id="kpi-avg">—</div>
-          <div class="kpi-sub">
-            <span class="stars" id="kpi-stars"></span>
-            <span style="color:var(--ink-4)" id="kpi-notes-count"></span>
+    <!-- ── Section : Vue d'ensemble ── -->
+    <div class="section active" id="section-overview">
+      <div class="content">
+        <section class="kpis">
+          <div class="kpi">
+            <div class="kpi-label">Avis collectés</div>
+            <div class="kpi-val mono" id="kpi-total">—</div>
+            <div class="kpi-sub" id="kpi-total-sub">—</div>
+            <svg class="spark" viewBox="0 0 64 26" preserveAspectRatio="none" id="spark-total"></svg>
           </div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Affichés sur widget</div>
-          <div class="kpi-val mono" id="kpi-shown">—</div>
-          <div class="kpi-sub" id="kpi-shown-sub">—</div>
-          <svg class="spark" viewBox="0 0 64 26" preserveAspectRatio="none" id="spark-shown"></svg>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Statut du compte</div>
-          <div class="kpi-val mono" id="kpi-status" style="font-size:20px;margin-top:12px">—</div>
-          <div class="kpi-sub" id="kpi-status-sub">—</div>
-        </div>
-      </section>
-
-      <!-- Charts row -->
-      <section class="grid">
-        <div class="panel">
-          <div class="panel-head">
-            <h2>Collecte d'avis</h2>
-            <span class="sub">— 6 derniers mois</span>
-            <div class="spacer"></div>
-            <div class="legend">
-              <span><i style="background:#6D5EF5"></i>Collectés</span>
-              <span><i style="background:#3C3768"></i>Affichés</span>
+          <div class="kpi">
+            <div class="kpi-label">Note moyenne</div>
+            <div class="kpi-val mono" id="kpi-avg">—</div>
+            <div class="kpi-sub">
+              <span class="stars" id="kpi-stars"></span>
+              <span style="color:var(--ink-4)" id="kpi-notes-count"></span>
             </div>
           </div>
-          <div class="chart">
-            <svg id="bars" viewBox="0 0 640 196" preserveAspectRatio="none"></svg>
+          <div class="kpi">
+            <div class="kpi-label">Affichés sur widget</div>
+            <div class="kpi-val mono" id="kpi-shown">—</div>
+            <div class="kpi-sub" id="kpi-shown-sub">—</div>
+            <svg class="spark" viewBox="0 0 64 26" preserveAspectRatio="none" id="spark-shown"></svg>
           </div>
-        </div>
+          <div class="kpi">
+            <div class="kpi-label">Statut du compte</div>
+            <div class="kpi-val mono" id="kpi-status" style="font-size:20px;margin-top:12px">—</div>
+            <div class="kpi-sub" id="kpi-status-sub">—</div>
+          </div>
+        </section>
 
-        <div class="panel">
+        <section class="grid">
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Collecte d'avis</h2><span class="sub">— 6 derniers mois</span>
+              <div class="spacer"></div>
+              <div class="legend">
+                <span><i style="background:#6D5EF5"></i>Collectés</span>
+                <span><i style="background:#3C3768"></i>Affichés</span>
+              </div>
+            </div>
+            <div class="chart">
+              <svg id="bars" viewBox="0 0 640 196" preserveAspectRatio="none"></svg>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Répartition des notes</h2>
+              <div class="spacer"></div>
+              <span class="sub mono" id="dist-total">— avis</span>
+            </div>
+            <div class="dist" id="dist"></div>
+          </div>
+        </section>
+
+        <section class="grid" style="grid-template-columns: 1fr 1.55fr;">
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Sources de collecte</h2><div class="spacer"></div><span class="sub">30 j</span>
+            </div>
+            <div class="src" id="sources"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Activité récente</h2><div class="spacer"></div>
+              <span class="sub mono">flux temps réel</span>
+            </div>
+            <div class="src" id="activity" style="padding-top:2px"></div>
+          </div>
+        </section>
+
+        <section class="panel tablewrap">
           <div class="panel-head">
-            <h2>Répartition des notes</h2>
-            <div class="spacer"></div>
-            <span class="sub mono" id="dist-total">— avis</span>
+            <h2>Avis reçus</h2><div class="spacer"></div>
+            <button class="btn" style="padding:6px 11px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+              Filtrer
+            </button>
           </div>
-          <div class="dist" id="dist"></div>
-        </div>
-      </section>
-
-      <!-- Sources + activity -->
-      <section class="grid" style="grid-template-columns: 1fr 1.55fr;">
-        <div class="panel">
-          <div class="panel-head">
-            <h2>Sources de collecte</h2>
-            <div class="spacer"></div>
-            <span class="sub">30 j</span>
+          <table><thead><tr>
+            <th>Client</th><th>Note</th><th>Avis</th><th>Date</th><th>Statut</th><th class="r"></th>
+          </tr></thead>
+          <tbody id="rows"></tbody></table>
+          <div class="table-foot">
+            <span class="muted" id="table-count">—</span>
+            <div class="pager" id="pager"></div>
           </div>
-          <div class="src" id="sources"></div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head">
-            <h2>Activité récente</h2>
-            <div class="spacer"></div>
-            <span class="sub mono">flux temps réel</span>
-          </div>
-          <div class="src" id="activity" style="padding-top:2px"></div>
-        </div>
-      </section>
-
-      <!-- Reviews table -->
-      <section class="panel tablewrap">
-        <div class="panel-head">
-          <h2>Avis reçus</h2>
-          <div class="spacer"></div>
-          <button class="btn" style="padding:6px 11px">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
-            Filtrer
-          </button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Client</th>
-              <th>Note</th>
-              <th>Avis</th>
-              <th>Date</th>
-              <th>Statut</th>
-              <th class="r"></th>
-            </tr>
-          </thead>
-          <tbody id="rows"></tbody>
-        </table>
-        <div class="table-foot">
-          <span class="muted" id="table-count">—</span>
-          <div class="pager" id="pager"></div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
+
+    <!-- ── Section : Avis ── -->
+    <div class="section" id="section-avis">
+      <div class="content">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Tous les avis</h2><div class="spacer"></div>
+            <span class="sub mono" id="avis-section-count">—</span>
+          </div>
+          <table><thead><tr>
+            <th>Client</th><th>Note</th><th>Avis</th><th>Date</th><th>Statut</th><th class="r"></th>
+          </tr></thead>
+          <tbody id="rows-full"></tbody></table>
+          <div class="table-foot">
+            <span class="muted" id="table-count-full">—</span>
+            <div class="pager" id="pager-full"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ── Section : Widget ── -->
+    <div class="section" id="section-widget">
+      <div class="info-block">
+        <div class="panel" style="margin-bottom:20px">
+          <div class="panel-head">
+            <h2>Comment fonctionne le widget</h2>
+          </div>
+          <div style="padding:20px 22px">
+            <p style="margin-bottom:16px">Le widget TrustCollect est un petit script que vous collez sur votre site web. Il affiche automatiquement vos avis approuvés dans un carrousel élégant, mis à jour en temps réel.</p>
+
+            <div class="feature-list">
+              <div class="feature-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Seuls les avis que vous avez <strong>approuvés</strong> (statut "Affiché") apparaissent</span>
+              </div>
+              <div class="feature-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Design adaptatif — fonctionne sur mobile et desktop</span>
+              </div>
+              <div class="feature-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Mise à jour automatique dès qu'un avis est approuvé</span>
+              </div>
+              <div class="feature-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Aucune compétence technique requise pour l'installation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom:20px">
+          <div class="panel-head">
+            <h2>Aperçu du widget</h2>
+            <div class="spacer"></div>
+            <span class="sub">tel qu'il apparaît sur votre site</span>
+          </div>
+          <div style="padding:24px 22px">
+            <div class="preview-widget">
+              <div class="pw-card">
+                <div class="pw-stars">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.5L12 15l-4.9 2.3.9-5.5-4-4 5.6-.8z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.5L12 15l-4.9 2.3.9-5.5-4-4 5.6-.8z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.5L12 15l-4.9 2.3.9-5.5-4-4 5.6-.8z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.5L12 15l-4.9 2.3.9-5.5-4-4 5.6-.8z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.5L12 15l-4.9 2.3.9-5.5-4-4 5.6-.8z"/></svg>
+                </div>
+                <div class="pw-text">"Excellent service, très professionnel et à l'écoute."</div>
+                <div class="pw-name">— Marie T.</div>
+              </div>
+              <div class="pw-card">
+                <div class="pw-stars">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.5L12 15l-4.9 2.3.9-5.5-4-4 5.6-.8z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.5L12 15l-4.9 2.3.9-5.5-4-4 5.6-.8z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.5L12 15l-4.9 2.3.9-5.5-4-4 5.6-.8z"/></svg>
+                  <svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.5L12 15l-4.9 2.3.9-5.5-4-4 5.6-.8z"/></svg>
+                  <svg viewBox="0 0 24 24" style="fill:#ddd"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.5L12 15l-4.9 2.3.9-5.5-4-4 5.6-.8z"/></svg>
+                </div>
+                <div class="pw-text">"Je recommande vivement, résultats au-delà de mes attentes."</div>
+                <div class="pw-name">— Jean D.</div>
+              </div>
+            </div>
+            <p style="font-size:12px;color:var(--ink-4);margin-top:4px">Aperçu statique — votre widget affichera vos vrais avis approuvés.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Installer le widget</h2>
+          </div>
+          <div style="padding:20px 22px">
+            <div class="steps">
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-body">
+                  <h3>Copiez le code d'intégration</h3>
+                  <p>Cliquez sur "Copier" pour copier votre code personnalisé avec votre identifiant client.</p>
+                  <div class="code-box" id="widget-snippet-box">
+                    <button class="btn copy-btn" onclick="copySnippet()">Copier</button>
+                    <span id="widget-snippet">Chargement…</span>
+                  </div>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-body">
+                  <h3>Collez-le sur votre site</h3>
+                  <p>Dans l'éditeur de votre site (Webflow, Wix, WordPress…), collez le code juste avant la balise <code style="color:var(--primary-ink)">&lt;/body&gt;</code> de votre page. Sur la plupart des plateformes, il y a un champ "Custom code" ou "HTML personnalisé" dans les paramètres du site.</p>
+                </div>
+              </div>
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-body">
+                  <h3>Approuvez vos avis</h3>
+                  <p>Dans la section <strong>Avis</strong>, les avis avec le statut "Affiché" apparaissent sur votre site. Les avis "En modération" ou "Masqués" restent invisibles pour vos visiteurs. Vous gardez le contrôle total.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section : Demandes d'avis ── -->
+    <div class="section" id="section-demandes">
+      <div class="info-block">
+        <div class="panel" style="margin-bottom:20px">
+          <div class="panel-head">
+            <h2>Votre lien de collecte</h2>
+          </div>
+          <div style="padding:20px 22px">
+            <p style="margin-bottom:16px">Partagez ce lien avec vos clients pour collecter des avis. Chaque soumission arrive directement dans votre tableau de bord pour modération.</p>
+            <div class="link-box">
+              <span id="collect-link">Chargement…</span>
+              <button class="btn" onclick="copyCollectLink()" id="copy-collect-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copier
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-bottom:20px">
+          <div class="panel-head">
+            <h2>Template email à envoyer</h2>
+            <div class="spacer"></div>
+            <button class="btn" onclick="copyEmailTemplate()">Copier le template</button>
+          </div>
+          <div style="padding:20px 22px">
+            <p style="margin-bottom:14px;font-size:13px;color:var(--ink-3)">Envoyez ce message à vos clients après une prestation :</p>
+            <div class="code-box" style="color:var(--ink-2);font-family:'IBM Plex Sans',sans-serif;font-size:13px;line-height:1.7;white-space:pre-line" id="email-template">Bonjour [Prénom],
+
+Je me permets de vous contacter suite à notre collaboration.
+Votre retour est très précieux pour moi — pourriez-vous prendre
+2 minutes pour laisser un avis ?
+
+👉 <span id="email-link-placeholder" style="color:var(--primary-ink)">Lien de collecte</span>
+
+Merci beaucoup pour votre confiance,
+[Votre prénom]</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Partager sur WhatsApp / SMS</h2>
+          </div>
+          <div style="padding:20px 22px">
+            <p style="margin-bottom:16px;font-size:13px;color:var(--ink-3)">Message court idéal pour WhatsApp ou SMS :</p>
+            <div class="code-box" style="color:var(--ink-2);font-family:'IBM Plex Sans',sans-serif;font-size:13px;line-height:1.7;white-space:pre-line" id="sms-template">Bonjour [Prénom] 👋 Merci pour votre confiance !
+Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
+<span id="sms-link-placeholder" style="color:var(--primary-ink)">Lien de collecte</span></div>
+            <button class="btn" style="margin-top:12px" onclick="copySmsTemplate()">Copier le SMS</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section : QR & supports ── -->
+    <div class="section" id="section-qr">
+      <div class="info-block">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>QR Code de collecte</h2>
+          </div>
+          <div style="padding:24px 22px">
+            <p style="margin-bottom:20px">Imprimez ce QR code sur vos supports (cartes de visite, devis, factures, flyers…). Vos clients le scannent et laissent un avis en quelques secondes.</p>
+            <div class="qr-wrap">
+              <img id="qr-img" class="qr-img" src="" alt="QR Code" />
+              <div class="qr-info">
+                <h3>Comment l'utiliser ?</h3>
+                <p>Téléchargez l'image et intégrez-la dans vos documents Word, PDF ou présentations. Vous pouvez aussi l'imprimer directement et la coller sur vos supports physiques.</p>
+                <p style="margin-top:10px">Le QR code pointe vers votre page de collecte personnalisée — chaque scan est tracé dans votre tableau de bord.</p>
+                <a id="qr-download" download="qrcode-trustcollect.png" class="btn" style="display:inline-flex;margin-top:14px;text-decoration:none">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+                  Télécharger le QR code
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section : Paramètres ── -->
+    <div class="section" id="section-parametres">
+      <div class="info-block">
+        <div class="panel" style="margin-bottom:20px">
+          <div class="panel-head"><h2>Informations du compte</h2></div>
+          <div style="padding:20px 22px">
+            <div class="param-grid">
+              <div class="param-card">
+                <div class="label">Nom du compte</div>
+                <div class="val" id="param-name">—</div>
+              </div>
+              <div class="param-card">
+                <div class="label">Plan actif</div>
+                <div class="val" id="param-plan">—</div>
+              </div>
+              <div class="param-card">
+                <div class="label">Statut</div>
+                <div class="val" id="param-statut">—</div>
+              </div>
+              <div class="param-card">
+                <div class="label">Date d'inscription</div>
+                <div class="val" id="param-date">—</div>
+              </div>
+              <div class="param-card" style="grid-column:1/-1">
+                <div class="label">Identifiant client (ID)</div>
+                <div class="val mono" id="param-id">—</div>
+                <div class="hint">Cet identifiant est dans l'URL de votre tableau de bord : <code style="color:var(--primary-ink)">?id=VOTRE_ID</code></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2>Votre tableau de bord</h2></div>
+          <div style="padding:20px 22px">
+            <p style="margin-bottom:14px;font-size:13.5px;color:var(--ink-2)">Lien direct vers votre espace client — � mettre en favori :</p>
+            <div class="link-box">
+              <span id="dashboard-link" style="font-size:12px">—</span>
+              <button class="btn" onclick="copyDashboardLink()">Copier</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
 <script>
-  // ── Helpers ──────────────────────────────────────────────────────────────
-  const STAR = (on) => `<svg viewBox="0 0 24 24"><path class="${on ? 'star-on' : 'star-off'}" d="M12 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.8 6.4 19.7l1.1-6.2L3 9.1l6.2-.9L12 2.5Z"/></svg>`;
-  function starHTML(n, total = 5) { let s = ''; for (let i = 1; i <= total; i++) s += STAR(i <= n); return s; }
-
-  function initials(name) {
-    return (name || '?').split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  // ── Helpers ──
+  const STAR = (on) => `<svg viewBox="0 0 24 24"><path class="${on?'star-on':'star-off'}" d="M12 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.8 6.4 19.7l1.1-6.2L3 9.1l6.2-.9L12 2.5Z"/></svg>`;
+  function starHTML(n,total=5){let s='';for(let i=1;i<=total;i++)s+=STAR(i<=n);return s;}
+  function initials(name){return(name||'?').split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);}
+  function fmtDate(dateStr){
+    if(!dateStr)return'—';
+    try{const d=new Date(dateStr);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'});}
+    catch{return dateStr;}
   }
-
-  function fmtDate(dateStr) {
-    if (!dateStr) return '—';
-    try {
-      const d = new Date(dateStr);
-      return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-    } catch { return dateStr; }
-  }
-
-  function fmtAvg(notes) {
-    if (!notes.length) return '—';
-    const avg = notes.reduce((a, b) => a + b, 0) / notes.length;
-    return avg.toFixed(1).replace('.', ',');
-  }
-
-  const AV_COLORS = ['#1C46D9','#157A4E','#9A6400','#A8326B','#2A6E8F','#6B4FA0','#7A3E2E','#2E6B6B'];
-
-  function showError(msg) {
+  const AV_COLORS=['#1C46D9','#157A4E','#9A6400','#A8326B','#2A6E8F','#6B4FA0','#7A3E2E','#2E6B6B'];
+  function showError(msg){
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('error').classList.remove('hidden');
-    document.getElementById('error-msg').textContent = msg;
+    document.getElementById('error-msg').textContent=msg;
   }
 
-  // ── Spark line ──────────────────────────────────────────────────────────
-  function sparkLine(id, points, color) {
-    const W = 64, H = 26;
-    const min = Math.min(...points), max = Math.max(...points);
-    const range = max - min || 1;
-    const xs = points.map((_, i) => (i / (points.length - 1)) * W);
-    const ys = points.map(v => H - 2 - ((v - min) / range) * (H - 4));
-    const pts = xs.map((x, i) => `${x},${ys[i]}`).join(' ');
-    document.getElementById(id).innerHTML =
-      `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6"/>`;
+  // ── Navigation ──
+  const SECTION_TITLES = {
+    overview:"Vue d'ensemble", avis:"Avis", widget:"Widget",
+    demandes:"Demandes d'avis", qr:"QR & supports", parametres:"Paramètres"
+  };
+  function showSection(name) {
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.getElementById('section-'+name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    const btns = document.querySelectorAll('.nav-item');
+    btns.forEach(b=>{if(b.getAttribute('onclick')===`showSection('${name}')`)b.classList.add('active');});
+    document.getElementById('topbar-title').textContent = SECTION_TITLES[name]||name;
+    document.getElementById('period').style.display = name==='overview' ? '' : 'none';
+    if(name==='avis') renderFullTable();
   }
 
-  // ── Bar chart (monthly) ─────────────────────────────────────────────────
-  function buildBarChart(avis) {
-    const now = new Date();
-    const months = [];
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      months.push({ label: d.toLocaleDateString('fr-FR', { month: 'short' }), y: d.getFullYear(), m: d.getMonth() });
+  // ── Spark line ──
+  function sparkLine(id,points,color){
+    const W=64,I=26,min=Math.min(...points),max=Math.max(...points),range=max-min||1;
+    const xs=points.map((_,i)=>(i/(points.length-1))*W);
+    const ys=points.map(v=>H-2-((v-min)/range)*(H-4));
+    const pts=xs.map((x,i)=>`${x},${ys[i]}`).join(' ');
+    document.getElementById(id).innerHTML=`<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6"/>`;
+  }
+
+  // ── Bar chart ──
+  function buildBarChart(avis){
+    const now=new Date(),months=[];
+    for(let i=5;i>=0;i--){
+      const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+      months.push({label:d.toLocaleDateString('fr-FR',{month:'short'}),y:d.getFullYear(),m:d.getMonth()});
     }
-    const collected = months.map(mo =>
-      avis.filter(a => {
-        if (!a.date) return false;
-        const d = new Date(a.date);
-        return d.getFullYear() === mo.y && d.getMonth() === mo.m;
-      }).length
-    );
-    const shown = months.map((mo, i) =>
-      avis.filter(a => {
-        if (!a.date || !a.affiche) return false;
-        const d = new Date(a.date);
-        return d.getFullYear() === mo.y && d.getMonth() === mo.m;
-      }).length
-    );
-
-    const maxVal = Math.max(...collected, 1);
-    const W = 640, H = 196, pad = 22, gap = 18;
-    const innerW = W - pad * 2, bw = (innerW / months.length) - gap;
-    let svg = '';
-    [0.25, 0.5, 0.75, 1].forEach(t => {
-      const y = pad + (H - pad * 2) * (1 - t);
-      svg += `<line x1="${pad}" y1="${y}" x2="${W - pad}" y2="${y}" stroke="#22222E" stroke-width="1"/>`;
-      svg += `<text class="axis" x="0" y="${y + 3}">${Math.round(maxVal * t)}</text>`;
+    const collected=months.map(mo=>avis.filter(a=>{
+      if(!a.date)return false;
+      const d=new Date(a.date);
+      return d.getFullYear()===mo.y&&d.getMonth()===mo.m;
+    }).length);
+    const shown=months.map(mo=>avis.filter(a=>{
+      if(!a.date||!a.affiche)return false;
+      const d=new Date(a.date);
+      return d.getFullYear()===mo.y&&d.getMonth()===mo.m;
+    }).length);
+    const maxVal=Math.max(...collected,1),W=640,H=196,pad=22,gap=18;
+    const innerW=W-pad*2,bw=(innerW/months.length)-gap;
+    let svg='';
+    [0.25,0.5,0.75,1].forEach(t=>{
+      const y=pad+(H-pad*2)*(1-t);
+      svg+=`<line x1="${pad}" y1="${y}" x2="${W-pad}" y2="${y}" stroke="#22222E" stroke-width="1"/>`;
+      svg+=`<text class="axis" x="0" y="${y+3}">${Math.round(maxVal*t)}</text>`;
     });
-    months.forEach((mo, i) => {
-      const x = pad + i * (bw + gap) + gap / 2;
-      const hc = (H - pad * 2) * (collected[i] / maxVal);
-      const hs = (H - pad * 2) * (shown[i] / maxVal);
-      const yc = H - pad - hc, ys = H - pad - hs;
-      svg += `<rect x="${x}" y="${yc}" width="${bw}" height="${hc}" rx="2.5" fill="#6D5EF5"/>`;
-      if (shown[i] > 0)
-        svg += `<rect x="${x + bw * 0.5}" y="${ys}" width="${bw * 0.5}" height="${hs}" rx="2" fill="#3C3768"/>`;
-      svg += `<text class="axis" x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${mo.label}</text>`;
+    months.forEach((mo,i)=>{
+      const x=pad+i*(bw+gap)+gap/2;
+      const hc=(H-pad*2)*(collected[i]/maxVal),hs=(H-pad*2)*(shown[i]/maxVal);
+      const yc=H-pad-hc,ys=H-pad-hs;
+      svg+=`<rect x="${x}" y="${yc}" width="${bw}" height="${hc}" rx="2.5" fill="#6D5EF5"/>`;
+      if(shown[i]>0)svg+=`<rect x="${x+bw*.5}" y="${ys}" width="${bw*.5}" height="${hs}" rx="2" fill="#3C3768"/>`;
+      svg+=`<text class="axis" x="${x+bw/2}" y="${H-6}" text-anchor="middle">${mo.label}</text>`;
     });
-    document.getElementById('bars').innerHTML = svg;
+    document.getElementById('bars').innerHTML=svg;
   }
 
-  // ── Rating distribution ─────────────────────────────────────────────────
-  function buildDist(avis) {
-    const dist = [5, 4, 3, 2, 1].map(k => [k, avis.filter(a => a.note === k).length]);
-    const distMax = Math.max(...dist.map(d => d[1]), 1);
-    document.getElementById('dist-total').textContent = `${avis.length} avis`;
-    document.getElementById('dist').innerHTML = dist.map(([k, v]) => `
+  // ── Dist ──
+  function buildDist(avis){
+    const dist=[5,4,3,2,1].map(k=>[k,avis.filter(a=>a.note===k).length]);
+    const distMax=Math.max(...dist.map(d=>d[1]),1);
+    document.getElementById('dist-total').textContent=`${avis.length} avis`;
+    document.getElementById('dist').innerHTML=dist.map(([k,v])=>`
       <div class="dist-row">
         <span class="k">${k}<svg viewBox="0 0 24 24"><path class="star-on" d="M12 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.8 6.4 19.7l1.1-6.2L3 9.1l6.2-.9L12 2.5Z"/></svg></span>
-        <span class="bar-track"><span class="bar-fill" style="width:${Math.max(v > 0 ? 3 : 0, v / distMax * 100)}%"></span></span>
+        <span class="bar-track"><span class="bar-fill" style="width:${Math.max(v>0?3:0,v/distMax*100)}%"></span></span>
         <span class="v">${v}</span>
       </div>`).join('');
   }
 
-  // ── Sources (derived from avis statuts) ─────────────────────────────────
-  function buildSources(avis) {
-    const LINKICO = `<svg viewBox="0 0 24 24" fill="none" stroke="#9A8BFF" stroke-width="1.7"><path d="M9 15l6-6M10 7l1-1a4 4 0 0 1 6 6l-1 1M14 17l-1 1a4 4 0 0 1-6-6l1-1"/></svg>`;
-    const FORMICO = `<svg viewBox="0 0 24 24" fill="none" stroke="#ECECF2" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 8h8M8 12h6M8 16h4"/></svg>`;
-    const total = avis.length || 1;
-    const approuves = avis.filter(a => a.statut === 'Approuvé').length;
-    const enAttente = avis.filter(a => a.statut === 'En attente').length;
-    const sources = [
-      ['Page de collecte', `${approuves} avis approuvés`, LINKICO, approuves],
-      ['Formulaire Tally', `${enAttente} en attente`, FORMICO, enAttente],
-    ].filter(s => s[3] > 0);
-    if (!sources.length) sources.push(['Page de collecte', 'Aucun avis', LINKICO, 0]);
-    const srcMax = Math.max(...sources.map(s => s[3]), 1);
-    document.getElementById('sources').innerHTML = sources.map(([n, s, ic, v]) => `
+  // ── Sources ──
+  function buildSources(avis){
+    const LINKICO=`<svg viewBox="0 0 24 24" fill="none" stroke="#9A8BFF" stroke-width="1.7"><path d="M9 15l6-6M10 7l1-1a4 4 0 0 1 6 6l-1 1M14 17l-1 1a4 4 0 0 1-6-6l1-1"/></svg>`;
+    const FORMICO=`<svg viewBox="0 0 24 24" fill="none" stroke="#ECECF2" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 8h8M8 12h6M8 16h4"/></svg>`;
+    const approuves=avis.filter(a=>a.statut==='Approuvé').length;
+    const enAttente=avis.filter(a=>a.statut==='En attente').length;
+    const sources=[
+      ['Page de collecte',`${approuves} avis approuvés`,LINKICO,approuves],
+      ['Formulaire Tally',`${enAttente} en attente`,FORMICO,enAttente],
+    ].filter(s=>s[3]>0);
+    if(!sources.length)sources.push(['Page de collecte','Aucun avis',LINKICO,0]);
+    const srcMax=Math.max(...sources.map(s=>s[3]),1);
+    document.getElementById('sources').innerHTML=sources.map(([n,s,ic,v])=>`
       <div class="src-row">
         <span class="src-ico">${ic}</span>
         <span><span class="src-name">${n}</span><br><span class="src-sub">${s}</span></span>
-        <span class="src-bar"><i style="width:${v / srcMax * 100}%"></i></span>
+        <span class="src-bar"><i style="width:${v/srcMax*100}%"></i></span>
         <span class="src-val">${v}</span>
       </div>`).join('');
   }
 
-  // ── Activity feed (last 4 events from avis) ──────────────────────────────
-  function buildActivity(avis) {
-    const sorted = [...avis].sort((a, b) => {
-      const da = a.date ? new Date(a.date) : 0;
-      const db = b.date ? new Date(b.date) : 0;
-      return db - da;
-    }).slice(0, 4);
-
-    function relativeDate(dateStr) {
-      if (!dateStr) return '—';
-      const diff = Date.now() - new Date(dateStr).getTime();
-      const h = Math.floor(diff / 3600000);
-      if (h < 1) return 'il y a moins d\'1 h';
-      if (h < 24) return `il y a ${h} h`;
-      const d = Math.floor(h / 24);
-      if (d === 1) return 'hier';
-      return `il y a ${d} j`;
+  // ── Activity ──
+  function buildActivity(avis){
+    const sorted=[...avis].sort((a,b)=>{
+      const da=a.date?new Date(a.date):0,db=b.date?new Date(b.date):0;
+      return db-da;
+    }).slice(0,4);
+    function relativeDate(ds){
+      if(!ds)return'—';
+      const h=Math.floor((Date.now()-new Date(ds).getTime())/3600000);
+      if(h<1)return"il y a moins d'1 h";
+      if(h<24)return`il y a ${h} h`;
+      const d=Math.floor(h/24);
+      return d===1?'hier':`il y a ${d} j`;
     }
-
-    document.getElementById('activity').innerHTML = sorted.map(a => {
-      const note = a.note || 0;
-      const nom = a.nom || 'Anonyme';
-      const statut = a.statut || '';
-      const affiche = a.affiche;
-      let label = `Nouvel avis ${note ? note + '★' : ''}`;
-      if (affiche) label = `Avis publié sur le widget`;
-      else if (statut === 'En attente') label = `Avis ${note ? note + '★ ' : ''}en attente de modération`;
-      return `
-        <div class="src-row">
-          <span class="src-ico" style="border-color:var(--line)"><svg viewBox="0 0 24 24" fill="none" stroke="#9A8BFF" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 1.5"/></svg></span>
-          <span style="flex:1"><span class="src-name">${label}</span><br><span class="src-sub">${nom}</span></span>
-          <span class="date">${relativeDate(a.date)}</span>
-        </div>`;
-    }).join('') || '<div class="src-row"><span style="color:var(--ink-4);font-size:13px;padding:8px 0">Aucune activité récente</span></div>';
+    document.getElementById('activity').innerHTML=sorted.map(a=>{
+      const note=a.note||0,nom=a.nom||'Anonyme',ctatut=a.statut||'',affiche=a.affiche;
+      let label=`Nouvel avis ${note?note+'★':''}`;
+      if(affiche)label='Avis publié sur le widget';
+      else if(statut==='En attente')label=`Avis ${note?note+'★ ':''}en attente de modération`;
+      return`<div class="src-row">
+        <span class="src-ico" style="border-color:var(--line)"><svg viewBox="0 0 24 24" fill="none" stroke="#9A8BFF" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 1.5"/></svg></span>
+        <span style="flex:1"><span class="src-name">${label}</span><br><span class="src-sub">${nom}</span></span>
+        <span class="date">${relativeDate(a.date)}</span>
+      </div>`;
+    }).join('')||'<div class="src-row"><span style="color:var(--ink-4);font-size:13px;padding:8px 0">Aucune activité récente</span></div>';
   }
 
-  // ── Reviews table ───────────────────────────────────────────────────────
-  const PAGE_SIZE = 6;
-  let allAvis = [], currentPage = 1;
+  // ── Table helpers ──
+  const PAGE_SIZE=6;
+  let allAvis=[],currentPage=1,currentPageFull=1;
 
-  function renderTable() {
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const page = allAvis.slice(start, start + PAGE_SIZE);
-    const totalPages = Math.ceil(allAvis.length / PAGE_SIZE);
-
-    document.getElementById('rows').innerHTML = page.map((a, i) => {
-      const nom = a.nom || 'Anonyme';
-      const email = a.email || '';
-      const note = a.note || 0;
-      const texte = a.avis || '';
-      const dateStr = fmtDate(a.date);
-      const affiche = a.affiche;
-      const statut = a.statut || 'En attente';
-      const init = initials(nom);
-      const colorIdx = (start + i) % AV_COLORS.length;
-      const badgeClass = affiche ? 'on' : (statut === 'En attente' ? 'pending' : 'off');
-      const badgeLabel = affiche ? 'Affiché' : (statut === 'En attente' ? 'En modération' : 'Masqué');
-      return `<tr>
-        <td><div class="cust">
-          <span class="cust-av" style="background:${AV_COLORS[colorIdx]}">${init}</span>
-          <span><span class="cust-name">${nom}</span><br><span class="cust-handle">${email ? email.split('@')[0] : '—'}</span></span>
-        </div></td>
-        <td><span class="stars">${starHTML(note)}</span></td>
-        <td><div class="rev-text">${texte || '<span style="color:var(--ink-4)">—</span>'}</div></td>
-        <td><span class="date">${dateStr}</span></td>
-        <td><span class="badge ${badgeClass}"><i></i>${badgeLabel}</span></td>
-        <td class="r"><span class="row-act"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span></td>
-      </tr>`;
-    }).join('') || `<tr><td colspan="6" style="text-align:center;color:var(--ink-4);padding:32px">Aucun avis pour le moment.</td></tr>`;
-
-    document.getElementById('table-count').textContent =
-      allAvis.length ? `${start + 1}–${Math.min(start + PAGE_SIZE, allAvis.length)} sur ${allAvis.length} avis` : '0 avis';
-
-    let pagerHTML = `<button ${currentPage === 1 ? 'disabled style="opacity:.4"' : ''} onclick="goPage(${currentPage - 1})">‹</button>`;
-    for (let p = 1; p <= Math.min(totalPages, 5); p++) {
-      pagerHTML += `<button class="${p === currentPage ? 'on' : ''}" onclick="goPage(${p})">${p}</button>`;
-    }
-    pagerHTML += `<button ${currentPage === totalPages || !totalPages ? 'disabled style="opacity:.4"' : ''} onclick="goPage(${currentPage + 1})">›</button>`;
-    document.getElementById('pager').innerHTML = pagerHTML;
+  function rowHTML(a,i,start){
+    const nom=a.nom||'Anonyme',email=a.email||'',note=a.note||0;
+    const texte=a.avis||'',dateStr=fmtDate(a.date),affiche=a.affiche,statut=a.statut||'En attente';
+    const init=initials(nom),colorIdx=(start+i)%AV_COLORS.length;
+    const badgeClass=affiche?'on':(statut==='En attente'?'pending':'off');
+    const badgeLabel=affiche?'Affiché':(statut==='En attente'?'En modération':'Masqué');
+    return`<tr>
+      <td><div class="cust">
+        <span class="cust-av" style="background:${AV_COLORS[colorIdx]}">${init}</span>
+        <span><span class="cust-name">${nom}</span><br><span class="cust-handle">${email?email.split('@')[0]:'—'}</span></span>
+      </div></td>
+      <td><span class="stars">${starHTML(note)}</span></td>
+      <td><div class="rev-text">${texte||'<span style="color:var(--ink-4)">—</span>'}</div></td>
+      <td><span class="date">${dateStr}</span></td>
+      <td><span class="badge ${badgeClass}"><i></i>${badgeLabel}</span></td>
+      <td class="r"><span class="row-act"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span></td>
+    </tr>`;
   }
 
-  function goPage(p) {
-    const totalPages = Math.ceil(allAvis.length / PAGE_SIZE);
-    if (p < 1 || p > totalPages) return;
-    currentPage = p;
-    renderTable();
+  function pagerHTML(current,total,fn){
+    let h=`<button ${current===1?'disabled style="opacity:.4"':''} onclick="${fn}(${current-1})">‹</button>`;
+    for(let p=1;p<=Math.min(total,5);p++)
+      h+=`<button class="${p===current?'on':''}" onclick="${fn}(${p})">${p}</button>`;
+    h+=`<button ${current===total||!total?'disabled style="opacity:.4"':''} onclick="${fn}(${current+1})">›</button>`;
+    return h;
   }
 
-  // ── Main data load ───────────────────────────────────────────────────────
-  async function load() {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+  function renderTable(){
+    const start=(currentPage-1)*PAGE_SIZE,page=allAvis.slice(start,start+PAGE_SIZE);
+    const totalPages=Math.ceil(allAvis.length/PAGE_SIZE);
+    document.getElementById('rows').innerHTML=page.map((a,i)=>rowHTML(a,i,start)).join('')||
+      `<tr><td colspan="6" style="text-align:center;color:var(--ink-4);padding:32px">Aucun avis pour le moment.</td></tr>`;
+    document.getElementById('table-count').textContent=allAvis.length?`${start+1}–${Math.min(start+PAGE_SIZE,allAvis.length)} sur ${allAvis.length} avis`:'0 avis';
+    document.getElementById('pager').innerHTML=pagerHTML(currentPage,totalPages,'goPage');
+  }
+  function goPage(p){const t=Math.ceil(allAvis.length/PAGE_SIZE);if(p<1||p>t)return;currentPage=p;renderTable();}
 
-    if (!id) {
-      showError('Aucun identifiant client trouvé dans l\'URL. Utilisez ?id=VOTRE_ID');
-      return;
-    }
+  function renderFullTable(){
+    const start=(currentPageFull-1)*PAGE_SIZE,page=allAvis.slice(start,start+PAGE_SIZE);
+    const totalPages=Math.ceil(allAvis.length/PAGE_SIZE);
+    document.getElementById('rows-full').innerHTML=page.map((a,i)=>rowHTML(a,i,start)).join('')||
+      `<tr><td colspan="6" style="text-align:center;color:var(--ink-4);padding:32px">Aucun avis pour le moment.</td></tr>`;
+    document.getElementById('table-count-full').textContent=allAvis.length?`${start+1}–${Math.min(start+PAGE_SIZE,allAvis.length)} sur ${allAvis.length} avis`:'0 avis';
+    document.getElementById('avis-section-count').textContent=`${allAvis.length} avis au total`;
+    document.getElementById('pager-full').innerHTML=pagerHTML(currentPageFull,totalPages,'goPageFull');
+  }
+  function goPageFull(p){const t=Math.ceil(allAvis.length/PAGE_SIZE);if(p<1||p>t)return;currentPageFull=p;renderFullTable();}
 
-    try {
-      const res = await fetch(`/api/dashboard?id=${id}`);
-      if (!res.ok) throw new Error(`Erreur ${res.status}`);
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
+  // ── Copy helpers ──
+  function copyText(text,btnId,label){
+    navigator.clipboard.writeText(text).then(()=>{
+      if(btnId){const b=document.getElementById(btnId);if(b){const o=b.textContent;b.textContent='✓ Copié';setTimeout(()=>b.textContent=o,1800);}}
+    });
+  }
+  function copyCollectLink(){
+    const link=document.getElementById('collect-link').textContent;
+    copyText(link,'copy-collect-btn');
+    const b=document.getElementById('copy-collect-btn');
+    if(b){const o=b.innerHTML;b.innerHTML='✓ Copié';setTimeout(()=>b.innerHTML=o,1800);}
+  }
+  function copySnippet(){
+    const code=document.getElementById('widget-snippet').textContent;
+    navigator.clipboard.writeText(code).then(()=>{
+      const b=document.querySelector('#widget-snippet-box .copy-btn');
+      if(b){const o=b.textContent;b.textContent='✓ Copié';setTimeout(()=>b.textContent=o,1800);}
+    });
+  }
+  function copyEmailTemplate(){
+    const id=new URLSearchParams(location.search).get('id')||'VOTRE_ID';
+    const link=`https://trustcollect-landing.vercel.app/collect?id=${id}`;
+    const text=`Bonjour [Prénom],\n\nJe me permets de vous contacter suite à notre collaboration.\nVotre retour est très précieux pour moi — pourriez-vous prendre 2 minutes pour laisser un avis ?\n\n👉 ${link}\n\nMerci beaucoup pour votre confiance,\n[Votre prénom]`;
+    navigator.clipboard.writeText(text);
+  }
+  function copySmsTemplate(){
+    const id=new URLSearchParams(location.search).get('id')||'VOTRE_ID';
+    const link=`https://trustcollect-landing.vercel.app/collect?id=${id}`;
+    const text=`Bonjour [Prénom] 👋 Merci pour votre confiance !\nPourriez-vous laisser un petit avis ici ? Ça prend 1 min :\n${link}`;
+    navigator.clipboard.writeText(text);
+  }
+  function copyDashboardLink(){
+    navigator.clipboard.writeText(document.getElementById('dashboard-link').textContent);
+  }
 
-      const { client, avis } = data;
-      const nom = client.name || 'Client';
-      const plan = client.plan || 'Starter';
-      const statut = client.statut || 'Actif';
-      const dateInscription = client.dateInscription;
+  // ── Main load ──
+  async function load(){
+    const params=new URLSearchParams(window.location.search),id=params.get('id');
+    if(!id){showError("Aucun identifiant client trouvé dans l'URL. Utilisez ?id=VOTRE_ID");return;}
+
+    try{
+      const res=await fetch(`/api/dashboard?id=${id}`);
+      if(!res.ok)throw new Error(`Erreur ${res.status}`);
+      const data=await res.json();
+      if(data.error)throw new Error(data.error);
+
+      const{client,avis}=data;
+      const nom=client.name||'Client',plan=client.plan||'Starter';
+      const statut=client.statut||'Actif',dateInscription=client.dateInscription;
 
       // Sidebar
-      document.getElementById('biz-initials').textContent = initials(nom);
-      document.getElementById('biz-name').textContent = nom;
-      document.getElementById('biz-plan').textContent = `WIDGET ACTIF · ${plan.toUpperCase()}`;
-      document.getElementById('topbar-crumb').textContent = nom;
-
-      // Nav count
-      document.getElementById('nav-count').textContent = avis.length;
+      document.getElementById('biz-initials').textContent=initials(nom);
+      document.getElementById('biz-name').textContent=nom;
+      document.getElementById('biz-plan').textContent=`WIDGET ACTIF · ${plan.toUpperCase()}`;
+      document.getElementById('topbar-crumb').textContent=nom;
+      document.getElementById('nav-count').textContent=avis.length;
 
       // KPIs
-      const notes = avis.map(a => a.note).filter(n => typeof n === 'number');
-      const shown = avis.filter(a => a.affiche).length;
-      const avg = notes.length ? (notes.reduce((a, b) => a + b, 0) / notes.length) : 0;
+      const notes=avis.map(a=>a.note).filter(n=>typeof n==='number');
+      const shown=avis.filter(a=>a.affiche).length;
+      const avg=notes.length?(notes.reduce((a,b)=>a+b,0)/notes.length):0;
 
-      document.getElementById('kpi-total').innerHTML = `<span class="mono">${avis.length}</span>`;
-      document.getElementById('kpi-total-sub').innerHTML = avis.length
-        ? `<span class="delta up">+${Math.min(avis.length, 18)}</span> sur 30 jours`
-        : 'Aucun avis reçu';
+      document.getElementById('kpi-total').innerHTML<`<span class="mono">${avis.length}</span>`;
+      document.getElementById('kpi-total-sub').innerHTML=avis.length
+        ?`<span class="delta up">+${Math.min(avis.length,18)}</span> sur 30 jours`:'Aucun avis reçu';
+      document.getElementById('kpi-avg').innerHTML=avg
+        ?`<span class="mono">${avg.toFixed(1).replace('.',',')}<small> / 5</small></span>`
+        :`<span style="color:var(--ink-4)">—</span>`;
+      document.getElementById('kpi-stars').innerHTML=avg?starHTML(Math.round(avg)):'';
+      document.getElementById('kpi-notes-count').textContent=notes.length?`${notes.length} notes`:'';
+      document.getElementById('kpi-shown').innerHTML<`<span class="mono">${shown}</span>`;
+      document.getElementById('kpi-shown-sub').innerHTML=shown
+        ?`<span class="delta up">+${Math.min(shown,6)}</span> publiés ce mois`:'Aucun publié';
+      document.getElementById('kpi-status').textContent=statut;
+      document.getElementById('kpi-status-sub').innerHTML=dateInscription
+        ?`Depuis le ${fmtDate(dateInscription)}`:`Plan ${plan}`;
 
-      document.getElementById('kpi-avg').innerHTML = avg
-        ? `<span class="mono">${avg.toFixed(1).replace('.', ',')}<small> / 5</small></span>`
-        : `<span style="color:var(--ink-4)">—</span>`;
-      document.getElementById('kpi-stars').innerHTML = avg ? starHTML(Math.round(avg)) : '';
-      document.getElementById('kpi-notes-count').textContent = notes.length ? `${notes.length} notes` : '';
-
-      document.getElementById('kpi-shown').innerHTML = `<span class="mono">${shown}</span>`;
-      document.getElementById('kpi-shown-sub').innerHTML = shown
-        ? `<span class="delta up">+${Math.min(shown, 6)}</span> publiés ce mois`
-        : 'Aucun publié';
-
-      document.getElementById('kpi-status').textContent = statut;
-      document.getElementById('kpi-status-sub').innerHTML =
-        dateInscription ? `Depuis le ${fmtDate(dateInscription)}` : `Plan ${plan}`;
-
-      // Spark lines
-      if (avis.length > 1) {
-        sparkLine('spark-total', [5, 8, 7, 12, 10, avis.length], '#6D5EF5');
-        sparkLine('spark-shown', [2, 4, 3, 6, 5, shown], '#3DD68C');
+      if(avis.length>1){
+        sparkLine('spark-total',[5,8,7,12,10,avis.length],'#6D5EF5');
+        sparkLine('spark-shown',[2,4,3,6,5,shown],'#3DD68C');
       }
 
-      // Charts & panels
-      buildBarChart(avis);
-      buildDist(avis);
-      buildSources(avis);
-      buildActivity(avis);
+      buildBarChart(avis);buildDist(avis);buildSources(avis);buildActivity(avis);
 
-      // Table
-      allAvis = [...avis].sort((a, b) => {
-        const da = a.date ? new Date(a.date) : 0;
-        const db = b.date ? new Date(b.date) : 0;
-        return db - da;
+      allAvis=[...avis].sort((a,b)=>{
+        const da=a.date?new Date(a.date):0,db=b.date?new Date(b.date):0;
+        return db-da;
       });
       renderTable();
 
-      // Show app
-      document.getElementById('loading').classList.add('hidden');
-      document.getElementById('app').style.display = 'grid';
+      // Widget snippet
+      const snippet=`<div id="trustcollect-widget" data-id="${id}"></div>\n<script src="https://trustcollect-dashboard.vercel.app/widget.js" async><\/script>`;
+      document.getElementById('widget-snippet').textContent=snippet;
 
-    } catch (err) {
-      showError(err.message || 'Impossible de charger les données.');
-    }
+      // Collect link
+      const collectURL=`https://trustcollect-landing.vercel.app/collect?id=${id}`;
+      document.getElementById('collect-link').textContent=collectURL;
+      document.getElementById('email-link-placeholder').textContent=collectURL;
+      document.getElementById('sms-link-placeholder').textContent=collectURL;
+
+      // QR code
+      const qrURL=`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(collectURL)}`;
+      const qrImg=document.getElementById('qr-img');
+      qrImg.src=qrURL;
+      document.getElementById('qr-download').href=qrURL;
+
+      // Dashboard link
+      document.getElementById('dashboard-link').textContent=window.location.href;
+
+      // Paramètres
+      document.getElementById('param-name').textContent=nom;
+      document.getElementById('param-plan').textContent=plan;
+      document.getElementById('param-statut').textContent=statut;
+      document.getElementById('param-date').textContent=dateInscription?fmtDate(dateInscription):'—';
+      document.getElementById('param-id').textContent=id;
+
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('app').style.display='grid';
+
+    }catch(err){showError(err.message||'Impossible de charger les données.');}
   }
 
-  // Period selector
-  document.querySelectorAll('#period button').forEach(b => b.addEventListener('click', () => {
-    document.querySelectorAll('#period button').forEach(x => x.classList.remove('on'));
+  document.querySelectorAll('#period button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#period button').forEach(x=>x.classList.remove('on'));
     b.classList.add('on');
   }));
 
   load();
-</script>
+ </script>
 </body>
 </html>
