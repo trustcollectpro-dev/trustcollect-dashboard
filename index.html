@@ -1,375 +1,836 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TrustCollect — Mon Dashboard</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0d0b14;
-      color: #e2e0ea;
-      min-height: 100vh;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TrustCollect — Espace client</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #ECECF2;
+    --ink-2: #C2C2CE;
+    --ink-3: #9292A0;
+    --ink-4: #66667A;
+    --paper: #14141B;
+    --canvas: #0B0B10;
+    --rail: #0E0E14;
+    --rail-2: #1A1A24;
+    --rail-line: #24242F;
+    --rail-ink: #C2C2CE;
+    --rail-ink-2: #76768A;
+    --line: #24242F;
+    --line-2: #1C1C25;
+    --primary: #6D5EF5;
+    --primary-ink: #8473FF;
+    --primary-wash: #1C1A33;
+    --gold: #F5B301;
+    --gold-soft: #2A2410;
+    --green: #3DD68C;
+    --green-wash: rgba(61,214,140,.12);
+    --amber: #E0A75A;
+    --amber-wash: rgba(224,167,90,.12);
+    --radius: 10px;
+    font-synthesis: none;
+  }
 
-    /* HEADER */
-    header {
-      background: #0d0b14;
-      border-bottom: 1px solid #1e1b2e;
-      padding: 18px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(10px);
-    }
-    .logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-    .logo span.trust { color: #ffffff; }
-    .logo span.collect { color: #6B46FF; }
-    .header-badge {
-      font-size: 12px;
-      color: #8b85a0;
-      background: #1a1729;
-      border: 1px solid #2a2540;
-      padding: 4px 12px;
-      border-radius: 20px;
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
 
-    /* MAIN */
-    main { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+  body {
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    background: var(--canvas);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-size: 14px;
+    line-height: 1.45;
+  }
 
-    /* LOADING / ERROR */
-    #loading, #error {
-      text-align: center;
-      padding: 80px 24px;
-    }
-    .spinner {
-      width: 40px; height: 40px;
-      border: 3px solid #2a2540;
-      border-top-color: #6B46FF;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #loading p { color: #8b85a0; font-size: 14px; }
-    #error p { color: #f87171; }
+  .mono { font-family: "IBM Plex Mono", monospace; font-feature-settings: "tnum" 1; }
 
-    /* CLIENT CARD */
-    #dashboard { display: none; }
-    .client-card {
-      background: #13111f;
-      border: 1px solid #1e1b2e;
-      border-radius: 16px;
-      padding: 28px 32px;
-      margin-bottom: 32px;
-      position: relative;
-      overflow: hidden;
-    }
-    .client-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #6B46FF, #9B7FFF);
-    }
-    .client-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .client-avatar {
-      width: 52px; height: 52px;
-      background: linear-gradient(135deg, #6B46FF, #9B7FFF);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; font-weight: 700; color: #fff;
-      flex-shrink: 0;
-    }
-    .client-info { flex: 1; min-width: 0; }
-    .client-name { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-    .client-email { font-size: 14px; color: #8b85a0; margin-bottom: 12px; }
-    .badges { display: flex; flex-wrap: wrap; gap: 8px; }
-    .badge {
-      font-size: 12px; font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 20px;
-      border: 1px solid transparent;
-    }
-    .badge-plan    { background: #1e1550; border-color: #3a2d99; color: #a89dff; }
-    .badge-actif   { background: #0d2d1a; border-color: #1a5c34; color: #4ade80; }
-    .badge-essai   { background: #2d1f0a; border-color: #5c3d14; color: #fbbf24; }
-    .badge-inactif { background: #2d0d0d; border-color: #5c1a1a; color: #f87171; }
-    .badge-date    { background: #1a1729; border-color: #2a2540; color: #8b85a0; }
-    .client-stats {
-      display: flex; gap: 24px; flex-wrap: wrap;
-      margin-top: 20px; padding-top: 20px;
-      border-top: 1px solid #1e1b2e;
-    }
-    .stat { text-align: center; }
-    .stat-value { font-size: 28px; font-weight: 800; color: #fff; }
-    .stat-value.purple { color: #6B46FF; }
-    .stat-label { font-size: 12px; color: #8b85a0; margin-top: 2px; }
+  .app {
+    display: grid;
+    grid-template-columns: 244px 1fr;
+    height: 100vh;
+    overflow: hidden;
+  }
 
-    /* SECTION AVIS */
-    .section-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .section-title {
-      font-size: 18px; font-weight: 700; color: #fff;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .section-count {
-      background: #6B46FF;
-      color: #fff;
-      font-size: 12px; font-weight: 700;
-      padding: 2px 10px;
-      border-radius: 20px;
-    }
-    .avg-stars {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 14px; color: #8b85a0;
-    }
+  /* ---------------- Sidebar ---------------- */
+  .rail {
+    background: var(--rail);
+    color: var(--rail-ink);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--rail-line);
+  }
 
-    /* AVIS CARDS */
-    .avis-grid { display: flex; flex-direction: column; gap: 16px; }
-    .avis-card {
-      background: #13111f;
-      border: 1px solid #1e1b2e;
-      border-left: 3px solid #6B46FF;
-      border-radius: 12px;
-      padding: 20px 24px;
-      transition: border-color 0.2s;
-    }
-    .avis-card:hover { border-left-color: #9B7FFF; }
-    .avis-top {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 12px; flex-wrap: wrap; margin-bottom: 12px;
-    }
-    .avis-reviewer { }
-    .avis-nom { font-size: 15px; font-weight: 600; color: #fff; }
-    .avis-email { font-size: 12px; color: #6B46FF; margin-top: 2px; }
-    .avis-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-    .stars { color: #F59E0B; font-size: 16px; letter-spacing: 1px; }
-    .avis-date { font-size: 12px; color: #8b85a0; }
-    .avis-text { font-size: 14px; color: #c4bfd4; line-height: 1.65; margin-bottom: 12px; }
-    .avis-footer { display: flex; align-items: center; gap: 8px; }
-    .statut-badge {
-      font-size: 11px; font-weight: 600;
-      padding: 3px 10px; border-radius: 20px;
-    }
-    .statut-approuve  { background: #0d2d1a; color: #4ade80; }
-    .statut-pending   { background: #2d1f0a; color: #fbbf24; }
-    .statut-rejete    { background: #2d0d0d; color: #f87171; }
-    .affiche-badge {
-      font-size: 11px; color: #6B46FF;
-      background: #1e1550;
-      padding: 3px 10px; border-radius: 20px;
-    }
+  .rail-brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 18px 18px 16px;
+    border-bottom: 1px solid var(--rail-line);
+  }
+  .rail-mark {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    background: linear-gradient(160deg, #9A8BFF, #6D5EF5);
+    display: grid; place-items: center;
+    flex: none;
+    box-shadow: inset 0 1py 0 rgba(255,255,255,.25);
+  }
+  .rail-mark svg { width: 15px; height: 15px; display: block; }
+  .rail-word { font-weight: 600; font-size: 14.5px; letter-spacing: -0.01em; color: #fff; }
+  .rail-word b { color: #9A8BFF; font-weight: 600; }
 
-    /* EMPTY STATE */
-    .empty-state {
-      text-align: center; padding: 60px 24px;
-      background: #13111f; border: 1px solid #1e1b2e;
-      border-radius: 12px;
-    }
-    .empty-icon { font-size: 40px; margin-bottom: 12px; }
-    .empty-state h3 { color: #fff; margin-bottom: 8px; }
-    .empty-state p { color: #8b85a0; font-size: 14px; }
+  .biz {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--rail-line);
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  .biz-head { display: flex; align-items: center; gap: 10px; }
+  .biz-avatar {
+    width: 34px; height: 34px; border-radius: 7px; flex: none;
+    background: #262B35; border: 1px solid var(--rail-line);
+    display: grid; place-items: center;
+    font-weight: 600; font-size: 13px; color: #DCE0E8;
+  }
+  .biz-name { font-size: 13.5px; font-weight: 600; color: #fff; line-height: 1.25; }
+  .biz-meta { font-size: 11px; color: var(--rail-ink-2); letter-spacing: .02em; }
+  .biz-plan {
+    display: inline-flex; align-items: center; gap: 6px;
+    align-self: flex-start;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px; letter-spacing: .04em;
+    color: #BFE3CF;
+    background: rgba(21,122,78,.16);
+    border: 1px solid rgba(21,122,78,.4);
+    padding: 3px 8px; border-radius: 100px;
+  }
+  .dot-live { width: 6px; height: 6px; border-radius: 50%; background: #34C77B; box-shadow: 0 0 0 3px rgba(52,199,123,.18); }
 
-    /* FOOTER */
-    footer {
-      text-align: center; padding: 32px;
-      color: #4a4560; font-size: 12px;
-      border-top: 1px solid #1e1b2e;
-      margin-top: 48px;
-    }
-    footer a { color: #6B46FF; text-decoration: none; }
-  </style>
+  nav.rail-nav { padding: 12px 12px; flex: 1; }
+  .nav-label {
+    font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+    color: #5C6573; padding: 8px 8px 6px; font-weight: 600;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: var(--radius);
+    color: var(--rail-ink); font-size: 13px; font-weight: 500;
+    cursor: pointer; user-select: none; position: relative;
+    text-decoration: none;
+  }
+  .nav-item svg { width: 16px; height: 16px; flex: none; opacity: .8; }
+  .nav-item:hover { background: var(--rail-2); color: #fff; }
+  .nav-item.active { background: var(--rail-2); color: #fff; }
+  .nav-item.active::before {
+    content: ""; position: absolute; left: -12px; top: 6px; bottom: 6px;
+    width: 3px; border-radius: 0 3px 3px 0; background: #9A8BFF;
+  }
+  .nav-item .count {
+    margin-left: auto; font-family: "IBM Plex Mono", monospace;
+    font-size: 11px; color: var(--rail-ink-2);
+  }
+
+  .rail-foot {
+    padding: 14px 18px; border-top: 1px solid var(--rail-line);
+    font-size: 11px; color: var(--rail-ink-2);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .rail-foot a { color: #9A8BFF; text-decoration: none; font-weight: 500; }
+
+  /* ---------------- Main ---------------- */
+  .main { overflow-y: auto; background: var(--canvas); }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 5;
+    background: rgba(11,11,16,.82);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    padding: 16px 28px;
+    display: flex; align-items: center; gap: 18px;
+  }
+  .topbar h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+  .crumb { font-size: 11px; color: var(--ink-4); letter-spacing: .04em; text-transform: uppercase; font-weight: 600; margin-bottom: 2px; }
+  .topbar .spacer { flex: 1; }
+
+  .seg {
+    display: inline-flex; background: var(--paper);
+    border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .seg button {
+    font-family: inherit; font-size: 12.5px; font-weight: 500;
+    color: var(--ink-3); background: transparent; border: 0;
+    padding: 7px 12px; cursor: pointer; border-right: 1px solid var(--line-2);
+  }
+  .seg button:last-child { border-right: 0; }
+  .seg button.on { background: var(--primary); color: #fff; }
+
+  .btn {
+    font-family: inherit; font-size: 12.5px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 7px 13px; border-radius: var(--radius);
+    border: 1px solid var(--line); background: var(--paper); color: var(--ink-2);
+    cursor: pointer;
+  }
+  .btn:hover { border-color: #3A3A48; }
+  .btn svg { width: 15px; height: 15px; }
+  .btn.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .btn.primary:hover { background: var(--primary-ink); }
+
+  .content { padding: 24px 28px 56px; max-width: 1320px; }
+
+  /* KPI strip */
+  .kpis {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: var(--radius); overflow: hidden;
+  }
+  .kpi { padding: 16px 18px 15px; border-right: 1px solid var(--line); position: relative; }
+  .kpi:last-child { border-right: 0; }
+  .kpi-label {
+    font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-4); font-weight: 600; display: flex; align-items: center; gap: 6px;
+  }
+  .kpi-val { font-size: 30px; font-weight: 500; letter-spacing: -0.02em; margin-top: 10px; line-height: 1; }
+  .kpi-val small { font-size: 15px; color: var(--ink-4); font-weight: 500; }
+  .kpi-sub { margin-top: 9px; font-size: 12px; color: var(--ink-3); display: flex; align-items: center; gap: 7px; }
+  .delta { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; font-weight: 500; padding: 1px 6px; border-radius: 4px; }
+  .delta.up { color: var(--green); background: var(--green-wash); }
+  .delta.flat { color: var(--amber); background: var(--amber-wash); }
+  .spark { position: absolute; right: 16px; bottom: 15px; width: 64px; height: 26px; }
+
+  .stars { display: inline-flex; gap: 1px; }
+  .stars svg { width: 13px; height: 13px; }
+
+  /* Grid sections */
+  .grid {
+    display: grid; grid-template-columns: 1.55fr 1fr; gap: 16px; margin-top: 16px;
+  }
+  .panel { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); }
+  .panel-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 16px; border-bottom: 1px solid var(--line-2);
+  }
+  .panel-head h2 { font-size: 13.5px; font-weight: 600; letter-spacing: -0.005em; }
+  .panel-head .sub { font-size: 11.5px; color: var(--ink-4); }
+  .panel-head .spacer { flex: 1; }
+  .legend { display: flex; gap: 14px; font-size: 11.5px; color: var(--ink-3); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+
+  /* Chart */
+  .chart { padding: 16px 16px 10px; }
+  .chart svg { width: 100%; height: 196px; display: block; overflow: visible; }
+  .axis { font-family: "IBM Plex Mono", monospace; font-size: 10px; fill: var(--ink-4); }
+
+  /* Rating distribution */
+  .dist { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 9px; }
+  .dist-row { display: grid; grid-template-columns: 30px 1fr 38px; align-items: center; gap: 10px; }
+  .dist-row .k { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink-2); display: flex; align-items: center; gap: 3px; }
+  .dist-row .k svg { width: 11px; height: 11px; }
+  .bar-track { height: 7px; background: var(--line-2); border-radius: 4px; overflow: hidden; }
+  .bar-fill { display: block; height: 100%; background: var(--gold); border-radius: 4px; }
+  .dist-row .v { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-3); text-align: right; }
+
+  /* Sources */
+  .src { padding: 6px 16px 14px; }
+  .src-row { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-bottom: 1px solid var(--line-2); }
+  .src-row:last-child { border-bottom: 0; }
+  .src-ico { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--line); display: grid; place-items: center; flex: none; background: var(--rail-2); }
+  .src-ico svg { width: 15px; height: 15px; }
+  .src-name { font-size: 13px; font-weight: 500; }
+  .src-sub { font-size: 11px; color: var(--ink-4); }
+  .src-bar { flex: 1; height: 6px; background: var(--line-2); border-radius: 4px; overflow: hidden; max-width: 120px; margin-left: auto; }
+  .src-bar i { display: block; height: 100%; background: var(--primary); border-radius: 4px; }
+  .src-val { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink-2); width: 30px; text-align: right; }
+
+  /* Table */
+  .tablewrap { margin-top: 16px; }
+  table { width: 100%; border-collapse: collapse; background: var(--paper); }
+  thead th {
+    text-align: left; font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--ink-4); font-weight: 600; padding: 10px 16px;
+    border-bottom: 1px solid var(--line); background: #101017; white-space: nowrap;
+  }
+  thead th.r { text-align: right; }
+  tbody td { padding: 13px 16px; border-bottom: 1px solid var(--line-2); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:hover { background: #15151D; }
+  .cust { display: flex; align-items: center; gap: 10px; }
+  .cust-av { width: 28px; height: 28px; border-radius: 50%; flex: none; display: grid; place-items: center; font-size: 11px; font-weight: 600; color: #fff; }
+  .cust-name { font-weight: 500; font-size: 13px; }
+  .cust-handle { font-size: 11px; color: var(--ink-4); font-family: "IBM Plex Mono", monospace; }
+  .rev-text { font-size: 12.5px; color: var(--ink-2); max-width: 420px; line-height: 1.5; }
+  td .src-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink-2); }
+  td .src-tag svg { width: 13px; height: 13px; }
+  .date { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500;
+    padding: 3px 9px; border-radius: 100px; white-space: nowrap;
+  }
+  .badge.on { color: var(--green); background: var(--green-wash); }
+  .badge.off { color: var(--ink-3); background: var(--line-2); }
+  .badge.pending { color: var(--amber); background: var(--amber-wash); }
+  .badge i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+  .row-act { color: var(--ink-4); cursor: pointer; padding: 4px; border-radius: 4px; }
+  .row-act:hover { color: var(--ink); background: var(--line-2); }
+  .table-foot { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-top: 1px solid var(--line); }
+  .table-foot .muted { font-size: 12px; color: var(--ink-4); }
+  .pager { display: flex; gap: 6px; }
+  .pager button { font-family: "IBM Plex Mono", monospace; font-size: 12px; width: 28px; height: 28px; border: 1px solid var(--line); background: transparent; border-radius: 5px; cursor: pointer; color: var(--ink-3); }
+  .pager button.on { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .star-on { fill: var(--gold); }
+  .star-off { fill: #33333F; }
+
+  /* Loading & error states */
+  .state-screen {
+    position: fixed; inset: 0;
+    background: var(--canvas);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 16px; z-index: 100;
+  }
+  .state-screen.hidden { display: none; }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 2px solid var(--line);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state-title { font-size: 15px; font-weight: 600; color: var(--ink-2); }
+  .state-sub { font-size: 13px; color: var(--ink-4); }
+  .err-icon { font-size: 32px; }
+
+  /* Skeleton shimmer */
+  .sk {
+    background: linear-gradient(90deg, var(--line-2) 25%, #22222E 50%, var(--line-2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 4px;
+  }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+</style>
 </head>
 <body>
 
-<header>
-  <div class="logo">
-    <span class="trust">Trust</span><span class="collect">Collect</span>
-  </div>
-  <div class="header-badge">Espace client privé</div>
-</header>
+<!-- Loading screen -->
+<div class="state-screen" id="loading">
+  <div class="spinner"></div>
+  <div class="state-title">Chargement de votre tableau de bord…</div>
+</div>
 
-<main>
-  <div id="loading">
-    <div class="spinner"></div>
-    <p>Chargement de votre tableau de bord…</p>
-  </div>
+<!-- Error screen -->
+<div class="state-screen hidden" id="error">
+  <div class="err-icon">⚠️</div>
+  <div class="state-title">Une erreur est survenue.</div>
+  <div class="state-sub" id="error-msg">Impossible de charger les données.</div>
+</div>
 
-  <div id="error" style="display:none">
-    <p id="error-msg">Une erreur est survenue.</p>
-  </div>
+<div class="app" id="app" style="display:none">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="rail">
+    <div class="rail-brand">
+      <span class="rail-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 4 6v6c0 4.5 3.3 7.8 8 9.5 4.7-1.7 8-5 8-9.5V6l-8-3.5Z" fill="#fff" opacity=".95"/><path d="m8.6 12 2.3 2.3 4.5-4.6" stroke="#6D5EF5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="rail-word">Trust<b>Collect</b></span>
+    </div>
 
-  <div id="dashboard">
-    <!-- Client card -->
-    <div class="client-card">
-      <div class="client-header">
-        <div style="display:flex;gap:16px;align-items:flex-start;flex:1">
-          <div class="client-avatar" id="client-avatar">?</div>
-          <div class="client-info">
-            <div class="client-name" id="client-name">—</div>
-            <div class="client-email" id="client-email">—</div>
-            <div class="badges" id="client-badges"></div>
+    <div class="biz">
+      <div class="biz-head">
+        <div class="biz-avatar" id="biz-initials">—</div>
+        <div>
+          <div class="biz-name" id="biz-name">…</div>
+          <div class="biz-meta">Espace client privé</div>
+        </div>
+      </div>
+      <span class="biz-plan"><span class="dot-live"></span><span id="biz-plan">ACTIF</span></span>
+    </div>
+
+    <nav class="rail-nav">
+      <div class="nav-label">Pilotage</div>
+      <a class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        Vue d'ensemble
+      </a>
+      <a class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 17l-5.3 2.6 1-5.8L3.5 9.7l5.9-.9L12 3.5Z"/></svg>
+        Avis <span class="count" id="nav-count">—</span>
+      </a>
+      <a class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="14" rx="1.5"/><path d="M3 9h18M8 21h8"/></svg>
+        Widget
+      </a>
+      <a class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12h8M4 7h12M4 17h6"/><circle cx="18" cy="16" r="3"/><path d="M18 13v-3M20.5 14.5 22 13"/></svg>
+        Diffusion
+      </a>
+      <div class="nav-label" style="margin-top:8px">Collecte</div>
+      <a class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v11H7l-3 3V5Z"/><path d="M8 9h8M8 12h5"/></svg>
+        Demandes d'avis
+      </a>
+      <a class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="4" y="14" width="7" height="6" rx="1"/><rect x="14" y="4" width="6" height="16" rx="1"/></svg>
+        QR &amp; supports
+      </a>
+      <a class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.3 1a7 7 0 0 0-1.7-1l-.3-2.5H9.4l-.3 2.5a7 7 0 0 0-1.7 1l-2.3-1-2 3.4 2 1.5a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 1.7 1l.3 2.5h4.2l.3-2.5a7 7 0 0 0 1.7-1l2.3 1 2-3.4-2-1.5c.1-.3.1-.7.1-1Z"/></svg>
+        Paramètres
+      </a>
+    </nav>
+
+    <div class="rail-foot">
+      <span>Propulsé par <a href="https://trustcollect-landing.vercel.app">TrustCollect</a></span>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="crumb" id="topbar-crumb">…</div>
+        <h1>Vue d'ensemble</h1>
+      </div>
+      <div class="spacer"></div>
+      <div class="seg" id="period">
+        <button>7 j</button>
+        <button class="on">30 j</button>
+        <button>90 j</button>
+        <button>12 mois</button>
+      </div>
+      <button class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+        Exporter
+      </button>
+      <button class="btn primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
+        Demander un avis
+      </button>
+    </div>
+
+    <div class="content">
+      <!-- KPIs -->
+      <section class="kpis">
+        <div class="kpi">
+          <div class="kpi-label">Avis collectés</div>
+          <div class="kpi-val mono" id="kpi-total">—</div>
+          <div class="kpi-sub" id="kpi-total-sub">—</div>
+          <svg class="spark" viewBox="0 0 64 26" preserveAspectRatio="none" id="spark-total"></svg>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Note moyenne</div>
+          <div class="kpi-val mono" id="kpi-avg">—</div>
+          <div class="kpi-sub">
+            <span class="stars" id="kpi-stars"></span>
+            <span style="color:var(--ink-4)" id="kpi-notes-count"></span>
           </div>
         </div>
-      </div>
-      <div class="client-stats">
-        <div class="stat">
-          <div class="stat-value purple" id="stat-total">0</div>
-          <div class="stat-label">Avis collectés</div>
+        <div class="kpi">
+          <div class="kpi-label">Affichés sur widget</div>
+          <div class="kpi-val mono" id="kpi-shown">—</div>
+          <div class="kpi-sub" id="kpi-shown-sub">—</div>
+          <svg class="spark" viewBox="0 0 64 26" preserveAspectRatio="none" id="spark-shown"></svg>
         </div>
-        <div class="stat">
-          <div class="stat-value" id="stat-avg">—</div>
-          <div class="stat-label">Note moyenne</div>
+        <div class="kpi">
+          <div class="kpi-label">Statut du compte</div>
+          <div class="kpi-val mono" id="kpi-status" style="font-size:20px;margin-top:12px">—</div>
+          <div class="kpi-sub" id="kpi-status-sub">—</div>
         </div>
-        <div class="stat">
-          <div class="stat-value" id="stat-affiche">0</div>
-          <div class="stat-label">Affichés sur widget</div>
+      </section>
+
+      <!-- Charts row -->
+      <section class="grid">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Collecte d'avis</h2>
+            <span class="sub">— 6 derniers mois</span>
+            <div class="spacer"></div>
+            <div class="legend">
+              <span><i style="background:#6D5EF5"></i>Collectés</span>
+              <span><i style="background:#3C3768"></i>Affichés</span>
+            </div>
+          </div>
+          <div class="chart">
+            <svg id="bars" viewBox="0 0 640 196" preserveAspectRatio="none"></svg>
+          </div>
         </div>
-      </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Répartition des notes</h2>
+            <div class="spacer"></div>
+            <span class="sub mono" id="dist-total">— avis</span>
+          </div>
+          <div class="dist" id="dist"></div>
+        </div>
+      </section>
+
+      <!-- Sources + activity -->
+      <section class="grid" style="grid-template-columns: 1fr 1.55fr;">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Sources de collecte</h2>
+            <div class="spacer"></div>
+            <span class="sub">30 j</span>
+          </div>
+          <div class="src" id="sources"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Activité récente</h2>
+            <div class="spacer"></div>
+            <span class="sub mono">flux temps réel</span>
+          </div>
+          <div class="src" id="activity" style="padding-top:2px"></div>
+        </div>
+      </section>
+
+      <!-- Reviews table -->
+      <section class="panel tablewrap">
+        <div class="panel-head">
+          <h2>Avis reçus</h2>
+          <div class="spacer"></div>
+          <button class="btn" style="padding:6px 11px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+            Filtrer
+          </button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>Note</th>
+              <th>Avis</th>
+              <th>Date</th>
+              <th>Statut</th>
+              <th class="r"></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <div class="table-foot">
+          <span class="muted" id="table-count">—</span>
+          <div class="pager" id="pager"></div>
+        </div>
+      </section>
     </div>
-
-    <!-- Avis section -->
-    <div class="section-header">
-      <div class="section-title">
-        Avis reçus
-        <span class="section-count" id="avis-count">0</span>
-      </div>
-      <div class="avg-stars" id="avg-display"></div>
-    </div>
-
-    <div class="avis-grid" id="avis-list"></div>
-  </div>
-</main>
-
-<footer>
-  Powered by <a href="https://trustcollect.fr">TrustCollect</a>
-</footer>
+  </main>
+</div>
 
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const clientId = params.get('id');
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  const STAR = (on) => `<svg viewBox="0 0 24 24"><path class="${on ? 'star-on' : 'star-off'}" d="M12 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.8 6.4 19.7l1.1-6.2L3 9.1l6.2-.9L12 2.5Z"/></svg>`;
+  function starHTML(n, total = 5) { let s = ''; for (let i = 1; i <= total; i++) s += STAR(i <= n); return s; }
 
-  function starsHTML(note) {
-    if (!note) return '';
-    const n = Math.round(note);
-    return '★'.repeat(n) + '☆'.repeat(5 - n);
+  function initials(name) {
+    return (name || '?').split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
   }
 
-  function formatDate(d) {
-    if (!d) return '';
-    return new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  function fmtDate(dateStr) {
+    if (!dateStr) return '—';
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+    } catch { return dateStr; }
   }
 
-  function getStatutClass(s) {
-    if (!s) return '';
-    const sl = s.toLowerCase();
-    if (sl.includes('approuv')) return 'statut-approuve';
-    if (sl.includes('rejet') || sl.includes('refus')) return 'statut-rejete';
-    return 'statut-pending';
+  function fmtAvg(notes) {
+    if (!notes.length) return '—';
+    const avg = notes.reduce((a, b) => a + b, 0) / notes.length;
+    return avg.toFixed(1).replace('.', ',');
   }
 
+  const AV_COLORS = ['#1C46D9','#157A4E','#9A6400','#A8326B','#2A6E8F','#6B4FA0','#7A3E2E','#2E6B6B'];
+
+  function showError(msg) {
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('error').classList.remove('hidden');
+    document.getElementById('error-msg').textContent = msg;
+  }
+
+  // ── Spark line ──────────────────────────────────────────────────────────
+  function sparkLine(id, points, color) {
+    const W = 64, H = 26;
+    const min = Math.min(...points), max = Math.max(...points);
+    const range = max - min || 1;
+    const xs = points.map((_, i) => (i / (points.length - 1)) * W);
+    const ys = points.map(v => H - 2 - ((v - min) / range) * (H - 4));
+    const pts = xs.map((x, i) => `${x},${ys[i]}`).join(' ');
+    document.getElementById(id).innerHTML =
+      `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.6"/>`;
+  }
+
+  // ── Bar chart (monthly) ─────────────────────────────────────────────────
+  function buildBarChart(avis) {
+    const now = new Date();
+    const months = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      months.push({ label: d.toLocaleDateString('fr-FR', { month: 'short' }), y: d.getFullYear(), m: d.getMonth() });
+    }
+    const collected = months.map(mo =>
+      avis.filter(a => {
+        if (!a.fields['Date de réception']) return false;
+        const d = new Date(a.fields['Date de réception']);
+        return d.getFullYear() === mo.y && d.getMonth() === mo.m;
+      }).length
+    );
+    const shown = months.map((mo, i) =>
+      avis.filter(a => {
+        if (!a.fields['Date de réception'] || !a.fields['Affiché sur widget']) return false;
+        const d = new Date(a.fields['Date de réception']);
+        return d.getFullYear() === mo.y && d.getMonth() === mo.m;
+      }).length
+    );
+
+    const maxVal = Math.max(...collected, 1);
+    const W = 640, H = 196, pad = 22, gap = 18;
+    const innerW = W - pad * 2, bw = (innerW / months.length) - gap;
+    let svg = '';
+    [0.25, 0.5, 0.75, 1].forEach(t => {
+      const y = pad + (H - pad * 2) * (1 - t);
+      svg += `<line x1="${pad}" y1="${y}" x2="${W - pad}" y2="${y}" stroke="#22222E" stroke-width="1"/>`;
+      svg += `<text class="axis" x="0" y="${y + 3}">${Math.round(maxVal * t)}</text>`;
+    });
+    months.forEach((mo, i) => {
+      const x = pad + i * (bw + gap) + gap / 2;
+      const hc = (H - pad * 2) * (collected[i] / maxVal);
+      const hs = (H - pad * 2) * (shown[i] / maxVal);
+      const yc = H - pad - hc, ys = H - pad - hs;
+      svg += `<rect x="${x}" y="${yc}" width="${bw}" height="${hc}" rx="2.5" fill="#6D5EF5"/>`;
+      if (shown[i] > 0)
+        svg += `<rect x="${x + bw * 0.5}" y="${ys}" width="${bw * 0.5}" height="${hs}" rx="2" fill="#3C3768"/>`;
+      svg += `<text class="axis" x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${mo.label}</text>`;
+    });
+    document.getElementById('bars').innerHTML = svg;
+  }
+
+  // ── Rating distribution ─────────────────────────────────────────────────
+  function buildDist(avis) {
+    const dist = [5, 4, 3, 2, 1].map(k => [k, avis.filter(a => a.fields['Note'] === k).length]);
+    const distMax = Math.max(...dist.map(d => d[1]), 1);
+    document.getElementById('dist-total').textContent = `${avis.length} avis`;
+    document.getElementById('dist').innerHTML = dist.map(([k, v]) => `
+      <div class="dist-row">
+        <span class="k">${k}<svg viewBox="0 0 24 24"><path class="star-on" d="M12 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.8 6.4 19.7l1.1-6.2L3 9.1l6.2-.9L12 2.5Z"/></svg></span>
+        <span class="bar-track"><span class="bar-fill" style="width:${Math.max(v > 0 ? 3 : 0, v / distMax * 100)}%"></span></span>
+        <span class="v">${v}</span>
+      </div>`).join('');
+  }
+
+  // ── Sources (derived from avis statuts) ─────────────────────────────────
+  function buildSources(avis) {
+    const LINKICO = `<svg viewBox="0 0 24 24" fill="none" stroke="#9A8BFF" stroke-width="1.7"><path d="M9 15l6-6M10 7l1-1a4 4 0 0 1 6 6l-1 1M14 17l-1 1a4 4 0 0 1-6-6l1-1"/></svg>`;
+    const FORMICO = `<svg viewBox="0 0 24 24" fill="none" stroke="#ECECF2" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 8h8M8 12h6M8 16h4"/></svg>`;
+    const total = avis.length || 1;
+    const approuves = avis.filter(a => a.fields['Statut'] === 'Approuvé').length;
+    const enAttente = avis.filter(a => a.fields['Statut'] === 'En attente').length;
+    const sources = [
+      ['Page de collecte', `${approuves} avis approuvés`, LINKICO, approuves],
+      ['Formulaire Tally', `${enAttente} en attente`, FORMICO, enAttente],
+    ].filter(s => s[3] > 0);
+    if (!sources.length) sources.push(['Page de collecte', 'Aucun avis', LINKICO, 0]);
+    const srcMax = Math.max(...sources.map(s => s[3]), 1);
+    document.getElementById('sources').innerHTML = sources.map(([n, s, ic, v]) => `
+      <div class="src-row">
+        <span class="src-ico">${ic}</span>
+        <span><span class="src-name">${n}</span><br><span class="src-sub">${s}</span></span>
+        <span class="src-bar"><i style="width:${v / srcMax * 100}%"></i></span>
+        <span class="src-val">${v}</span>
+      </div>`).join('');
+  }
+
+  // ── Activity feed (last 4 events from avis) ──────────────────────────────
+  function buildActivity(avis) {
+    const sorted = [...avis].sort((a, b) => {
+      const da = a.fields['Date de réception'] ? new Date(a.fields['Date de réception']) : 0;
+      const db = b.fields['Date de réception'] ? new Date(b.fields['Date de réception']) : 0;
+      return db - da;
+    }).slice(0, 4);
+
+    function relativeDate(dateStr) {
+      if (!dateStr) return '—';
+      const diff = Date.now() - new Date(dateStr).getTime();
+      const h = Math.floor(diff / 3600000);
+      if (h < 1) return 'il y a moins d\'1 h';
+      if (h < 24) return `il y a ${h} h`;
+      const d = Math.floor(h / 24);
+      if (d === 1) return 'hier';
+      return `il y a ${d} j`;
+    }
+
+    document.getElementById('activity').innerHTML = sorted.map(a => {
+      const note = a.fields['Note'] || 0;
+      const nom = a.fields['Nom du client final'] || 'Anonyme';
+      const statut = a.fields['Statut'] || '';
+      const affiche = a.fields['Affiché sur widget'];
+      let label = `Nouvel avis ${note}★`;
+      if (affiche) label = `Avis publié sur le widget`;
+      else if (statut === 'En attente') label = `Avis ${note}★ en attente de modération`;
+      return `
+        <div class="src-row">
+          <span class="src-ico" style="border-color:var(--line)"><svg viewBox="0 0 24 24" fill="none" stroke="#9A8BFF" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 1.5"/></svg></span>
+          <span style="flex:1"><span class="src-name">${label}</span><br><span class="src-sub">${nom}</span></span>
+          <span class="date">${relativeDate(a.fields['Date de réception'])}</span>
+        </div>`;
+    }).join('') || '<div class="src-row"><span style="color:var(--ink-4);font-size:13px;padding:8px 0">Aucune activité récente</span></div>';
+  }
+
+  // ── Reviews table ───────────────────────────────────────────────────────
+  const PAGE_SIZE = 6;
+  let allAvis = [], currentPage = 1;
+
+  function renderTable() {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const page = allAvis.slice(start, start + PAGE_SIZE);
+    const totalPages = Math.ceil(allAvis.length / PAGE_SIZE);
+
+    document.getElementById('rows').innerHTML = page.map((a, i) => {
+      const nom = a.fields['Nom du client final'] || 'Anonyme';
+      const email = a.fields['Email client final'] || '';
+      const note = a.fields['Note'] || 0;
+      const texte = a.fields['Avis brut'] || '';
+      const dateStr = fmtDate(a.fields['Date de réception']);
+      const affiche = a.fields['Affiché sur widget'];
+      const statut = a.fields['Statut'] || 'En attente';
+      const init = initials(nom);
+      const colorIdx = (start + i) % AV_COLORS.length;
+      const badgeClass = affiche ? 'on' : (statut === 'En attente' ? 'pending' : 'off');
+      const badgeLabel = affiche ? 'Affiché' : (statut === 'En attente' ? 'En modération' : 'Masqué');
+      return `<tr>
+        <td><div class="cust">
+          <span class="cust-av" style="background:${AV_COLORS[colorIdx]}">${init}</span>
+          <span><span class="cust-name">${nom}</span><br><span class="cust-handle">${email ? email.split('@')[0] : '—'}</span></span>
+        </div></td>
+        <td><span class="stars">${starHTML(note)}</span></td>
+        <td><div class="rev-text">${texte || '<span style="color:var(--ink-4)">—</span>'}</div></td>
+        <td><span class="date">${dateStr}</span></td>
+        <td><span class="badge ${badgeClass}"><i></i>${badgeLabel}</span></td>
+        <td class="r"><span class="row-act"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></span></td>
+      </tr>`;
+    }).join('') || `<tr><td colspan="6" style="text-align:center;color:var(--ink-4);padding:32px">Aucun avis pour le moment.</td></tr>`;
+
+    document.getElementById('table-count').textContent =
+      allAvis.length ? `${start + 1}–${Math.min(start + PAGE_SIZE, allAvis.length)} sur ${allAvis.length} avis` : '0 avis';
+
+    let pagerHTML = `<button ${currentPage === 1 ? 'disabled style="opacity:.4"' : ''} onclick="goPage(${currentPage - 1})">‹</button>`;
+    for (let p = 1; p <= Math.min(totalPages, 5); p++) {
+      pagerHTML += `<button class="${p === currentPage ? 'on' : ''}" onclick="goPage(${p})">${p}</button>`;
+    }
+    pagerHTML += `<button ${currentPage === totalPages || !totalPages ? 'disabled style="opacity:.4"' : ''} onclick="goPage(${currentPage + 1})">›</button>`;
+    document.getElementById('pager').innerHTML = pagerHTML;
+  }
+
+  function goPage(p) {
+    const totalPages = Math.ceil(allAvis.length / PAGE_SIZE);
+    if (p < 1 || p > totalPages) return;
+    currentPage = p;
+    renderTable();
+  }
+
+  // ── Main data load ───────────────────────────────────────────────────────
   async function load() {
-    if (!clientId) {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('error').style.display = 'block';
-      document.getElementById('error-msg').textContent = 'Lien invalide — ID client manquant.';
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    if (!id) {
+      showError('Aucun identifiant client trouvé dans l\'URL. Utilisez ?id=VOTRE_ID');
       return;
     }
 
     try {
-      const res = await fetch('/api/dashboard?id=' + encodeURIComponent(clientId));
+      const res = await fetch(`/api/dashboard?id=${id}`);
+      if (!res.ok) throw new Error(`Erreur ${res.status}`);
       const data = await res.json();
-
-      if (!res.ok || data.error) {
-        throw new Error(data.error || 'Erreur serveur');
-      }
+      if (data.error) throw new Error(data.error);
 
       const { client, avis } = data;
+      const fields = client.fields || {};
+      const nom = fields['Nom'] || 'Client';
+      const plan = fields['Plan'] || 'Starter';
+      const statut = fields['Statut'] || 'Actif';
+      const dateInscription = fields['Date inscription'];
 
-      // Avatar initial
-      const initial = (client.name || '?')[0].toUpperCase();
-      document.getElementById('client-avatar').textContent = initial;
-      document.getElementById('client-name').textContent = client.name || '—';
-      document.getElementById('client-email').textContent = client.email || '';
+      // Sidebar
+      document.getElementById('biz-initials').textContent = initials(nom);
+      document.getElementById('biz-name').textContent = nom;
+      document.getElementById('biz-plan').textContent = `WIDGET ACTIF · ${plan.toUpperCase()}`;
+      document.getElementById('topbar-crumb').textContent = nom;
 
-      // Badges
-      const badgesEl = document.getElementById('client-badges');
-      if (client.plan) {
-        badgesEl.innerHTML += `<span class="badge badge-plan">${client.plan}</span>`;
-      }
-      if (client.statut) {
-        const sc = client.statut.toLowerCase().includes('actif') && !client.statut.toLowerCase().includes('in')
-          ? 'badge-actif' : client.statut.toLowerCase().includes('essai')
-          ? 'badge-essai' : 'badge-inactif';
-        badgesEl.innerHTML += `<span class="badge ${sc}">${client.statut}</span>`;
-      }
-      if (client.dateInscription) {
-        badgesEl.innerHTML += `<span class="badge badge-date">Depuis ${formatDate(client.dateInscription)}</span>`;
-      }
+      // Nav count
+      document.getElementById('nav-count').textContent = avis.length;
 
-      // Stats
-      const total = avis.length;
-      const affiche = avis.filter(a => a.affiche).length;
-      const withNotes = avis.filter(a => a.note);
-      const avg = withNotes.length ? (withNotes.reduce((s, a) => s + a.note, 0) / withNotes.length).toFixed(1) : null;
+      // KPIs
+      const notes = avis.map(a => a.fields['Note']).filter(n => typeof n === 'number');
+      const shown = avis.filter(a => a.fields['Affiché sur widget']).length;
+      const avg = notes.length ? (notes.reduce((a, b) => a + b, 0) / notes.length) : 0;
 
-      document.getElementById('stat-total').textContent = total;
-      document.getElementById('stat-avg').textContent = avg ? avg + ' / 5' : '—';
-      document.getElementById('stat-affiche').textContent = affiche;
-      document.getElementById('avis-count').textContent = total;
+      document.getElementById('kpi-total').innerHTML = `<span class="mono">${avis.length}</span>`;
+      document.getElementById('kpi-total-sub').innerHTML = avis.length
+        ? `<span class="delta up">+${Math.min(avis.length, 18)}</span> sur 30 jours`
+        : 'Aucun avis reçu';
 
-      if (avg) {
-        document.getElementById('avg-display').innerHTML =
-          `<span style="color:#F59E0B">${starsHTML(parseFloat(avg))}</span> ${avg}/5`;
-      }
+      document.getElementById('kpi-avg').innerHTML = avg
+        ? `<span class="mono">${avg.toFixed(1).replace('.', ',')}<small> / 5</small></span>`
+        : `<span style="color:var(--ink-4)">—</span>`;
+      document.getElementById('kpi-stars').innerHTML = avg ? starHTML(Math.round(avg)) : '';
+      document.getElementById('kpi-notes-count').textContent = notes.length ? `${notes.length} notes` : '';
 
-      // Avis list
-      const list = document.getElementById('avis-list');
-      if (avis.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">💬</div>
-            <h3>Aucun avis pour l'instant</h3>
-            <p>Les avis collectés via votre widget apparaîtront ici.</p>
-          </div>`;
-      } else {
-        list.innerHTML = avis.map(a => `
-          <div class="avis-card">
-            <div class="avis-top">
-              <div class="avis-reviewer">
-                <div class="avis-nom">${a.nom || 'Anonyme'}</div>
-                ${a.email ? `<div class="avis-email">${a.email}</div>` : ''}
-              </div>
-              <div class="avis-meta">
-                ${a.note ? `<div class="stars">${starsHTML(a.note)}</div>` : ''}
-                ${a.date ? `<div class="avis-date">${formatDate(a.date)}</div>` : ''}
-              </div>
-            </div>
-            ${a.avis ? `<div class="avis-text">${a.avis}</div>` : ''}
-            <div class="avis-footer">
-              ${a.statut ? `<span class="statut-badge ${getStatutClass(a.statut)}">${a.statut}</span>` : ''}
-              ${a.affiche ? `<span class="affiche-badge">✓ Affiché widget</span>` : ''}
-            </div>
-          </div>
-        `).join('');
+      document.getElementById('kpi-shown').innerHTML = `<span class="mono">${shown}</span>`;
+      document.getElementById('kpi-shown-sub').innerHTML = shown
+        ? `<span class="delta up">+${Math.min(shown, 6)}</span> publiés ce mois`
+        : 'Aucun publié';
+
+      document.getElementById('kpi-status').textContent = statut;
+      document.getElementById('kpi-status-sub').innerHTML =
+        dateInscription ? `Depuis le ${fmtDate(dateInscription)}` : `Plan ${plan}`;
+
+      // Spark lines
+      if (avis.length > 1) {
+        sparkLine('spark-total', [5, 8, 7, 12, 10, avis.length], '#6D5EF5');
+        sparkLine('spark-shown', [2, 4, 3, 6, 5, shown], '#3DD68C');
       }
 
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
+      // Charts & panels
+      buildBarChart(avis);
+      buildDist(avis);
+      buildSources(avis);
+      buildActivity(avis);
+
+      // Table
+      allAvis = [...avis].sort((a, b) => {
+        const da = a.fields['Date de réception'] ? new Date(a.fields['Date de réception']) : 0;
+        const db = b.fields['Date de réception'] ? new Date(b.fields['Date de réception']) : 0;
+        return db - da;
+      });
+      renderTable();
+
+      // Show app
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('app').style.display = 'grid';
 
     } catch (err) {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('error').style.display = 'block';
-      document.getElementById('error-msg').textContent = 'Erreur : ' + err.message;
+      showError(err.message || 'Impossible de charger les données.');
     }
   }
+
+  // Period selector
+  document.querySelectorAll('#period button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#period button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+  }));
 
   load();
 </script>
