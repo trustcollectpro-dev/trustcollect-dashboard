@@ -79,7 +79,7 @@
     background: linear-gradient(160deg, #9A8BFF, #6D5EF5);
     display: grid; place-items: center;
     flex: none;
-    box-shadow: inset 0 1py 0 rgba(255,255,255,.25);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25);
   }
   .rail-mark svg { width: 15px; height: 15px; display: block; }
   .rail-word { font-weight: 600; font-size: 14.5px; letter-spacing: -0.01em; color: #fff; }
@@ -582,15 +582,15 @@
     }
     const collected = months.map(mo =>
       avis.filter(a => {
-        if (!a.fields['Date de réception']) return false;
-        const d = new Date(a.fields['Date de réception']);
+        if (!a.date) return false;
+        const d = new Date(a.date);
         return d.getFullYear() === mo.y && d.getMonth() === mo.m;
       }).length
     );
     const shown = months.map((mo, i) =>
       avis.filter(a => {
-        if (!a.fields['Date de réception'] || !a.fields['Affiché sur widget']) return false;
-        const d = new Date(a.fields['Date de réception']);
+        if (!a.date || !a.affiche) return false;
+        const d = new Date(a.date);
         return d.getFullYear() === mo.y && d.getMonth() === mo.m;
       }).length
     );
@@ -619,7 +619,7 @@
 
   // ── Rating distribution ─────────────────────────────────────────────────
   function buildDist(avis) {
-    const dist = [5, 4, 3, 2, 1].map(k => [k, avis.filter(a => a.fields['Note'] === k).length]);
+    const dist = [5, 4, 3, 2, 1].map(k => [k, avis.filter(a => a.note === k).length]);
     const distMax = Math.max(...dist.map(d => d[1]), 1);
     document.getElementById('dist-total').textContent = `${avis.length} avis`;
     document.getElementById('dist').innerHTML = dist.map(([k, v]) => `
@@ -635,8 +635,8 @@
     const LINKICO = `<svg viewBox="0 0 24 24" fill="none" stroke="#9A8BFF" stroke-width="1.7"><path d="M9 15l6-6M10 7l1-1a4 4 0 0 1 6 6l-1 1M14 17l-1 1a4 4 0 0 1-6-6l1-1"/></svg>`;
     const FORMICO = `<svg viewBox="0 0 24 24" fill="none" stroke="#ECECF2" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 8h8M8 12h6M8 16h4"/></svg>`;
     const total = avis.length || 1;
-    const approuves = avis.filter(a => a.fields['Statut'] === 'Approuvé').length;
-    const enAttente = avis.filter(a => a.fields['Statut'] === 'En attente').length;
+    const approuves = avis.filter(a => a.statut === 'Approuvé').length;
+    const enAttente = avis.filter(a => a.statut === 'En attente').length;
     const sources = [
       ['Page de collecte', `${approuves} avis approuvés`, LINKICO, approuves],
       ['Formulaire Tally', `${enAttente} en attente`, FORMICO, enAttente],
@@ -655,8 +655,8 @@
   // ── Activity feed (last 4 events from avis) ──────────────────────────────
   function buildActivity(avis) {
     const sorted = [...avis].sort((a, b) => {
-      const da = a.fields['Date de réception'] ? new Date(a.fields['Date de réception']) : 0;
-      const db = b.fields['Date de réception'] ? new Date(b.fields['Date de réception']) : 0;
+      const da = a.date ? new Date(a.date) : 0;
+      const db = b.date ? new Date(b.date) : 0;
       return db - da;
     }).slice(0, 4);
 
@@ -672,18 +672,18 @@
     }
 
     document.getElementById('activity').innerHTML = sorted.map(a => {
-      const note = a.fields['Note'] || 0;
-      const nom = a.fields['Nom du client final'] || 'Anonyme';
-      const statut = a.fields['Statut'] || '';
-      const affiche = a.fields['Affiché sur widget'];
-      let label = `Nouvel avis ${note}★`;
+      const note = a.note || 0;
+      const nom = a.nom || 'Anonyme';
+      const statut = a.statut || '';
+      const affiche = a.affiche;
+      let label = `Nouvel avis ${note ? note + '★' : ''}`;
       if (affiche) label = `Avis publié sur le widget`;
-      else if (statut === 'En attente') label = `Avis ${note}★ en attente de modération`;
+      else if (statut === 'En attente') label = `Avis ${note ? note + '★ ' : ''}en attente de modération`;
       return `
         <div class="src-row">
           <span class="src-ico" style="border-color:var(--line)"><svg viewBox="0 0 24 24" fill="none" stroke="#9A8BFF" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 1.5"/></svg></span>
           <span style="flex:1"><span class="src-name">${label}</span><br><span class="src-sub">${nom}</span></span>
-          <span class="date">${relativeDate(a.fields['Date de réception'])}</span>
+          <span class="date">${relativeDate(a.date)}</span>
         </div>`;
     }).join('') || '<div class="src-row"><span style="color:var(--ink-4);font-size:13px;padding:8px 0">Aucune activité récente</span></div>';
   }
@@ -698,13 +698,13 @@
     const totalPages = Math.ceil(allAvis.length / PAGE_SIZE);
 
     document.getElementById('rows').innerHTML = page.map((a, i) => {
-      const nom = a.fields['Nom du client final'] || 'Anonyme';
-      const email = a.fields['Email client final'] || '';
-      const note = a.fields['Note'] || 0;
-      const texte = a.fields['Avis brut'] || '';
-      const dateStr = fmtDate(a.fields['Date de réception']);
-      const affiche = a.fields['Affiché sur widget'];
-      const statut = a.fields['Statut'] || 'En attente';
+      const nom = a.nom || 'Anonyme';
+      const email = a.email || '';
+      const note = a.note || 0;
+      const texte = a.avis || '';
+      const dateStr = fmtDate(a.date);
+      const affiche = a.affiche;
+      const statut = a.statut || 'En attente';
       const init = initials(nom);
       const colorIdx = (start + i) % AV_COLORS.length;
       const badgeClass = affiche ? 'on' : (statut === 'En attente' ? 'pending' : 'off');
@@ -757,11 +757,10 @@
       if (data.error) throw new Error(data.error);
 
       const { client, avis } = data;
-      const fields = client.fields || {};
-      const nom = fields['Nom'] || 'Client';
-      const plan = fields['Plan'] || 'Starter';
-      const statut = fields['Statut'] || 'Actif';
-      const dateInscription = fields['Date inscription'];
+      const nom = client.name || 'Client';
+      const plan = client.plan || 'Starter';
+      const statut = client.statut || 'Actif';
+      const dateInscription = client.dateInscription;
 
       // Sidebar
       document.getElementById('biz-initials').textContent = initials(nom);
@@ -773,8 +772,8 @@
       document.getElementById('nav-count').textContent = avis.length;
 
       // KPIs
-      const notes = avis.map(a => a.fields['Note']).filter(n => typeof n === 'number');
-      const shown = avis.filter(a => a.fields['Affiché sur widget']).length;
+      const notes = avis.map(a => a.note).filter(n => typeof n === 'number');
+      const shown = avis.filter(a => a.affiche).length;
       const avg = notes.length ? (notes.reduce((a, b) => a + b, 0) / notes.length) : 0;
 
       document.getElementById('kpi-total').innerHTML = `<span class="mono">${avis.length}</span>`;
@@ -811,8 +810,8 @@
 
       // Table
       allAvis = [...avis].sort((a, b) => {
-        const da = a.fields['Date de réception'] ? new Date(a.fields['Date de réception']) : 0;
-        const db = b.fields['Date de réception'] ? new Date(b.fields['Date de réception']) : 0;
+        const da = a.date ? new Date(a.date) : 0;
+        const db = b.date ? new Date(b.date) : 0;
         return db - da;
       });
       renderTable();
