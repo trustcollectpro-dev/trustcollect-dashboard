@@ -820,10 +820,9 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
 
 <script>
   // ── Helpers ──
-  const STAR = (on) => `<svg viewBox="0 0 24 24"><path class="${on?'star-on':'star-off'}" d="M12 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.8 6.4 19.7l1.1-6.2L3
- 9.1l6.2-.9L12 2.5Z"/></svg>`;
+  const STAR = (on) => `<svg viewBox="0 0 24 24"><path class="${on?'star-on':'star-off'}" d="M12 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.8 6.4 19.7l1.1-6.2L3 9.1l6.2-.9L12 2.5Z"/></svg>`;
   function starHTML(n,total=5){let s='';for(let i=1;i<=total;i++)s+=STAR(i<=n);return s;}
-  function initials(name){return(name||'?').split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);}
+  function initials(name){return(nome||'?').split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);}
   function fmtDate(dateStr){
     if(!dateStr)return'—';
     try{const d=new Date(dateStr);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'});}
@@ -838,7 +837,7 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
 
   // ── Navigation ──
   const SECTION_TITLES = {
-    overview:"Vue d'ensemble", avis:"Avis", widget:"Widget",
+    overview:"Vue d'ensemble", avis:""Avis", widget:"Widget",
     demandes:"Demandes d'avis", qr:"QR & supports", parametres:"Paramètres"
   };
   function showSection(name) {
@@ -1072,7 +1071,7 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
       const shown=avis.filter(a=>a.affiche).length;
       const avg=notes.length?(notes.reduce((a,b)=>a+b,0)/notes.length):0;
 
-      document.getElementById('kpi-total').innerHTML<`<span class="mono">${avis.length}</span>`;
+      document.getElementById('kpi-total').textContent=avis.length;
       document.getElementById('kpi-total-sub').innerHTML=avis.length
         ?`<span class="delta up">+${Math.min(avis.length,18)}</span> sur 30 jours`:'Aucun avis reçu';
       document.getElementById('kpi-avg').innerHTML=avg
@@ -1080,7 +1079,7 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
         :`<span style="color:var(--ink-4)">—</span>`;
       document.getElementById('kpi-stars').innerHTML=avg?starHTML(Math.round(avg)):'';
       document.getElementById('kpi-notes-count').textContent=notes.length?`${notes.length} notes`:'';
-      document.getElementById('kpi-shown').innerHTML<`<span class="mono">${shown}</span>`;
+      document.getElementById('kpi-shown').textContent=shown;
       document.getElementById('kpi-shown-sub').innerHTML=shown
         ?`<span class="delta up">+${Math.min(shown,6)}</span> publiés ce mois`:'Aucun publié';
       document.getElementById('kpi-status').textContent=statut;
