@@ -805,7 +805,7 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
         <div class="panel">
           <div class="panel-head"><h2>Votre tableau de bord</h2></div>
           <div style="padding:20px 22px">
-            <p style="margin-bottom:14px;font-size:13.5px;color:var(--ink-2)">Lien direct vers votre espace client — � mettre en favori :</p>
+            <p style="margin-bottom:14px;font-size:13.5px;color:var(--ink-2)">Lien direct vers votre espace client — à mettre en favori :</p>
             <div class="link-box">
               <span id="dashboard-link" style="font-size:12px">—</span>
               <button class="btn" onclick="copyDashboardLink()">Copier</button>
@@ -822,7 +822,7 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
   // ── Helpers ──
   const STAR = (on) => `<svg viewBox="0 0 24 24"><path class="${on?'star-on':'star-off'}" d="M12 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.8 6.4 19.7l1.1-6.2L3 9.1l6.2-.9L12 2.5Z"/></svg>`;
   function starHTML(n,total=5){let s='';for(let i=1;i<=total;i++)s+=STAR(i<=n);return s;}
-  function initials(name){return(nome||'?').split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);}
+  function initials(name){return(name||'?').split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);}
   function fmtDate(dateStr){
     if(!dateStr)return'—';
     try{const d=new Date(dateStr);return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'});}
@@ -837,7 +837,7 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
 
   // ── Navigation ──
   const SECTION_TITLES = {
-    overview:"Vue d'ensemble", avis:""Avis", widget:"Widget",
+    overview:"Vue d'ensemble", avis:"Avis", widget:"Widget",
     demandes:"Demandes d'avis", qr:"QR & supports", parametres:"Paramètres"
   };
   function showSection(name) {
