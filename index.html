@@ -820,7 +820,8 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
 
 <script>
   // ── Helpers ──
-  const STAR = (on) => `<svg viewBox="0 0 24 24"><path class="${on?'star-on':'star-off'}" d="M12 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.8 6.4 19.7l1.1-6.2L3 9.1l6.2-.9L12 2.5Z"/></svg>`;
+  const STAR = (on) => `<svg viewBox="0 0 24 24"><path class="${on?'star-on':'star-off'}" d="M12 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 16.8 6.4 19.7l1.1-6.2L3
+ 9.1l6.2-.9L12 2.5Z"/></svg>`;
   function starHTML(n,total=5){let s='';for(let i=1;i<=total;i++)s+=STAR(i<=n);return s;}
   function initials(name){return(name||'?').split(/\s+/).map(w=>w[0]).join('').toUpperCase().slice(0,2);}
   function fmtDate(dateStr){
@@ -853,7 +854,7 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
 
   // ── Spark line ──
   function sparkLine(id,points,color){
-    const W=64,I=26,min=Math.min(...points),max=Math.max(...points),range=max-min||1;
+    const W=64,H=26,min=Math.min(...points),max=Math.max(...points),range=max-min||1;
     const xs=points.map((_,i)=>(i/(points.length-1))*W);
     const ys=points.map(v=>H-2-((v-min)/range)*(H-4));
     const pts=xs.map((x,i)=>`${x},${ys[i]}`).join(' ');
@@ -883,7 +884,7 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
     [0.25,0.5,0.75,1].forEach(t=>{
       const y=pad+(H-pad*2)*(1-t);
       svg+=`<line x1="${pad}" y1="${y}" x2="${W-pad}" y2="${y}" stroke="#22222E" stroke-width="1"/>`;
-      svg+=`<text class="axis" x="0" y="${y+3}">${Math.round(maxVal*t)}</text>`;
+      svg+=`<text class="axis" x="0" y="${y+3}">${Math.round(maxVal*t)}</text>`;
     });
     months.forEach((mo,i)=>{
       const x=pad+i*(bw+gap)+gap/2;
@@ -945,7 +946,7 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
       return d===1?'hier':`il y a ${d} j`;
     }
     document.getElementById('activity').innerHTML=sorted.map(a=>{
-      const note=a.note||0,nom=a.nom||'Anonyme',ctatut=a.statut||'',affiche=a.affiche;
+      const note=a.note||0,nom=a.nom||'Anonyme',statut=a.statut||'',affiche=a.affiche;
       let label=`Nouvel avis ${note?note+'★':''}`;
       if(affiche)label='Avis publié sur le widget';
       else if(statut==='En attente')label=`Avis ${note?note+'★ ':''}en attente de modération`;
@@ -1137,6 +1138,6 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
   }));
 
   load();
- </script>
+</script>
 </body>
 </html>
