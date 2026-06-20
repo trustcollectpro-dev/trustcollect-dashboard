@@ -1,3 +1,4 @@
+// v2
 const AIRTABLE_BASE_ID = 'appNfQrr0JMJ7pJox';
 const AVIS_TABLE = 'tblsZq7vxacMEhIZv';
 
