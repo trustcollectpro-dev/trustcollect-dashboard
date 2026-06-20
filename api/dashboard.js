@@ -45,11 +45,11 @@ module.exports = async function handler(req, res) {
                 id: a.id,
                 nom: a.fields['Nom du client final'] || 'Anonyme',
                 email: a.fields['Email client final'] || null,
-                note: a.fields['Note ( 1 a 5 )'] || null,
-                avis: a.fields['Avis reformule IA'] || a.fields['Avis brut'] || '',
-                date: a.fields['Date de reception'] || null,
+                note: a.fields['Note'] || null,
+                avis: a.fields['Avis reformulé IA'] || a.fields['Avis brut'] || '',
+                date: a.fields['Date de réception'] || null,
                 statut: a.fields['Statut'] || null,
-                affiche: a.fields['Affiche sur le widget'] || false,
+                affiche: a.fields['Affiché sur widget'] || false,
             }));
         }
 
