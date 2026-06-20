@@ -61,6 +61,7 @@ module.exports = async function handler(req, res) {
                 plan: f['Plan'] || '',
                 statut: f['Statut'] || '',
                 dateInscription: f['Date inscription'] || null,
+                googleMapsUrl: f['Lien Google Maps'] || null,
             },
             avis,
         });
