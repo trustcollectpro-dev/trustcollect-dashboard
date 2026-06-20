@@ -1,117 +1,280 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Laissez votre avis — TrustCollect</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#0B0B10;color:#ECECF2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
-.card{background:#14141B;border:1px solid #1E1E2A;border-radius:20px;padding:48px 40px;max-width:520px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.4)}
-.logo{display:flex;align-items:center;gap:10px;margin-bottom:32px}
-.logo svg{width:28px;height:28px}
-.logo-text{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.3px}
-.logo-text span{color:#6D5EF5}
-h1{font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;letter-spacing:-.4px}
-.subtitle{font-size:14px;color:#66667A;margin-bottom:36px;line-height:1.5}
-.section-label{font-size:11px;font-weight:700;color:#66667A;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
-.stars{display:flex;gap:6px;margin-bottom:8px}
-.stars label{cursor:pointer;font-size:40px;color:#2A2A3A;transition:color .12s,transform .12s;line-height:1;user-select:none}
-.stars label:hover,.stars label.on{color:#F5B301}
-.star-hint{font-size:13px;color:#66667A;margin-bottom:28px;min-height:20px}
-.field{margin-bottom:18px}
-.field label{display:block;font-size:13px;font-weight:500;color:#9292A2;margin-bottom:8px}
-.field textarea,.field input[type=text],.field input[type=email]{width:100%;background:#0F0F18;border:1.5px solid #1E1E2A;border-radius:10px;padding:13px 15px;font-family:'Inter',sans-serif;font-size:14px;color:#ECECF2;outline:none;transition:border-color .2s;resize:none}
-.field textarea:focus,.field input:focus{border-color:#6D5EF5;background:#111118}
-.field textarea{min-height:110px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.btn{width:100%;padding:15px;background:linear-gradient(135deg,#6D5EF5,#8B7BFF);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:#fff;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:10px;letter-spacing:-.2px}
-.btn:hover{opacity:.9}
-.btn:active{transform:scale(.98)}
-.btn:disabled{background:#1E1E2A;color:#44445A;cursor:not-allowed}
-.err{background:#1A0A12;border:1px solid #4A1025;border-radius:8px;padding:11px 14px;font-size:13px;color:#FF7080;margin-top:10px;display:none}
-.success{display:none;text-align:center;padding:16px 0}
-.check{width:64px;height:64px;background:linear-gradient(135deg,#6D5EF5,#3DD68C);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:28px}
-.success h2{font-size:21px;font-weight:700;color:#fff;margin-bottom:10px}
-.success p{font-size:14px;color:#66667A;line-height:1.7}
-@media(max-width:460px){.card{padding:28px 20px;border-radius:16px}.row{grid-template-columns:1fr}.stars label{font-size:34px}}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0B0B10;
+    color: #E8E8F0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+
+  .logo {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6D5EF5;
+    margin-bottom: 32px;
+    opacity: 0.8;
+  }
+
+  .card {
+    background: #14141B;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #F0F0FA;
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #6B6B7E;
+    margin-bottom: 32px;
+  }
+
+  .stars-section { margin-bottom: 28px; }
+  .stars-label { font-size: 13px; font-weight: 500; color: #9898AC; margin-bottom: 12px; }
+  .stars { display: flex; gap: 8px; align-items: center; }
+  .star {
+    font-size: 36px;
+    cursor: pointer;
+    transition: transform 0.12s, filter 0.12s;
+    color: #2A2A38;
+    user-select: none;
+    line-height: 1;
+  }
+  .star.active { color: #F5C518; }
+  .star.hov { color: #F5C518; filter: brightness(1.2); transform: scale(1.15); }
+  .star-hint {
+    font-size: 12px;
+    color: #6D5EF5;
+    font-weight: 500;
+    margin-left: 8px;
+    min-height: 16px;
+  }
+
+  .field { margin-bottom: 20px; }
+  label { display: block; font-size: 13px; font-weight: 500; color: #9898AC; margin-bottom: 8px; }
+
+  textarea, input[type="text"], input[type="email"] {
+    width: 100%;
+    background: #0B0B10;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: #E8E8F0;
+    font-family: inherit;
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    resize: none;
+  }
+  textarea { padding: 14px 16px; min-height: 120px; }
+  input[type="text"], input[type="email"] { padding: 12px 16px; }
+
+  textarea:focus, input:focus {
+    border-color: #6D5EF5;
+    box-shadow: 0 0 0 3px rgba(109,94,245,0.15);
+  }
+  textarea::placeholder, input::placeholder { color: #3E3E52; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: #6D5EF5;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, opacity 0.2s;
+    margin-top: 8px;
+    letter-spacing: 0.01em;
+  }
+  .btn-submit:hover:not(:disabled) { background: #7C6EFF; transform: translateY(-1px); }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .error-msg {
+    background: rgba(239,68,68,0.12);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 10px;
+    color: #F87171;
+    font-size: 13px;
+    padding: 10px 14px;
+    margin-top: 14px;
+    display: none;
+  }
+
+  .success {
+    text-align: center;
+    padding: 20px 0;
+    display: none;
+  }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: rgba(34,197,94,0.12);
+    border: 2px solid rgba(34,197,94,0.4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 32px;
+  }
+  .success h2 { font-size: 20px; font-weight: 700; color: #F0F0FA; margin-bottom: 8px; }
+  .success p { font-size: 14px; color: #6B6B7E; line-height: 1.6; }
+
+  .footer {
+    margin-top: 24px;
+    font-size: 12px;
+    color: #3E3E52;
+    text-align: center;
+  }
+  .footer a { color: #6D5EF5; text-decoration: none; }
+
+  @media (max-width: 480px) {
+    .card { padding: 28px 20px; }
+    .row { grid-template-columns: 1fr; gap: 0; }
+    .star { font-size: 30px; }
+  }
 </style>
 </head>
 <body>
+
+<div class="logo">TrustCollect</div>
+
 <div class="card">
-  <div class="logo">
-    <svg viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#6D5EF5"/><path d="M7 14l5 5L21 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <span class="logo-text">Trust<span>Collect</span></span>
+  <div class="success" id="success">
+    <div class="success-icon">&#10003;</div>
+    <h2>Merci pour votre avis !</h2>
+    <p>Votre témoignage a bien été reçu.<br>Il aide d'autres personnes à faire le bon choix.</p>
   </div>
 
-  <div id="fv">
-    <h1>Votre avis compte vraiment</h1>
-    <p class="subtitle">Partagez votre expérience en 1 minute. Cela aide d'autres personnes à nous faire confiance.</p>
+  <div id="formArea">
+    <h1>Partagez votre expérience</h1>
+    <p class="subtitle">Votre avis aide d'autres personnes à faire le bon choix.</p>
 
-    <div class="section-label">Votre note globale</div>
-    <div class="stars" id="stars">
-      <label data-v="1">★</label>
-      <label data-v="2">★</label>
-      <label data-v="3">★</label>
-      <label data-v="4">★</label>
-      <label data-v="5">★</label>
+    <div class="stars-section">
+      <div class="stars-label">Votre note globale</div>
+      <div class="stars" id="stars">
+        <span class="star" data-v="1">&#9733;</span>
+        <span class="star" data-v="2">&#9733;</span>
+        <span class="star" data-v="3">&#9733;</span>
+        <span class="star" data-v="4">&#9733;</span>
+        <span class="star" data-v="5">&#9733;</span>
+        <span class="star-hint" id="starHint"></span>
+      </div>
     </div>
-    <div class="star-hint" id="hint"></div>
 
     <div class="field">
-      <label>Votre avis *</label>
+      <label for="avis">Votre témoignage <span style="color:#6D5EF5">*</span></label>
       <textarea id="avis" placeholder="Décrivez votre expérience en quelques mots…"></textarea>
     </div>
-    <div class="row">
-      <div class="field"><label>Prénom *</label><input id="nom" type="text" placeholder="Marie"/></div>
-      <div class="field"><label>Email *</label><input id="email" type="email" placeholder="marie@exemple.fr"/></div>
-    </div>
-    <button class="btn" id="btn" onclick="send()">Envoyer mon avis →</button>
-    <div class="err" id="err"></div>
-  </div>
 
-  <div class="success" id="sv">
-    <div class="check">✓</div>
-    <h2>Merci beaucoup !</h2>
-    <p>Votre avis a bien été reçu.<br/>Il sera examiné et publié très prochainement.</p>
+    <div class="row">
+      <div class="field">
+        <label for="nom">Prénom</label>
+        <input type="text" id="nom" placeholder="Jean">
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="jean@email.com">
+      </div>
+    </div>
+
+    <button class="btn-submit" id="submitBtn" disabled>Envoyer mon avis</button>
+    <div class="error-msg" id="errorMsg"></div>
   </div>
 </div>
 
+<div class="footer">Propulsé par <a href="https://trustcollect.pro" target="_blank">TrustCollect</a></div>
+
 <script>
-const LABELS=['','Très mauvais','Mauvais','Correct','Bien','Excellent !'];
-let note=0,locked=false;
-const stars=[...document.querySelectorAll('#stars label')];
-const hint=document.getElementById('hint');
+  const WEBHOOK = 'https://hook.eu1.make.com/31uhf2jsqkfhmvttcb1qwbhgzjhm33bg';
+  const hints = ['', 'Mauvais', 'Passable', 'Bien', 'Très bien', 'Excellent !'];
+  const clientId = new URLSearchParams(window.location.search).get('id') || '';
 
-function paint(n){stars.forEach((s,i)=>{s.classList.toggle('on',i<n);s.style.color=i<n?'#F5B301':'';});}
+  let note = 0;
+  const stars = document.querySelectorAll('.star');
+  const starHint = document.getElementById('starHint');
+  const submitBtn = document.getElementById('submitBtn');
+  const avisEl = document.getElementById('avis');
+  const errorMsg = document.getElementById('errorMsg');
 
-stars.forEach((s,i)=>{
-  s.addEventListener('mouseenter',()=>{if(!locked){paint(i+1);hint.textContent=LABELS[i+1];}});
-  s.addEventListener('mouseleave',()=>{if(!locked){paint(note);hint.textContent=note?LABELS[note]:'';}});
-  s.addEventListener('click',()=>{note=i+1;locked=true;paint(note);hint.textContent=LABELS[note];hint.style.color='#6D5EF5';});
-});
+  function setStars(val) {
+    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.v) <= val));
+    starHint.textContent = hints[val] || '';
+  }
 
-async function send(){
-  const avis=document.getElementById('avis').value.trim();
-  const nom=document.getElementById('nom').value.trim();
-  const email=document.getElementById('email').value.trim();
-  const e=document.getElementById('err');
-  e.style.display='none';
-  if(!note){e.textContent='Veuillez sélectionner une note.';e.style.display='block';return;}
-  if(!avis){e.textContent='Veuillez écrire votre avis.';e.style.display='block';return;}
-  if(!nom){e.textContent='Veuillez indiquer votre prénom.';e.style.display='block';return;}
-  if(!email||!email.includes('@')){e.textContent='Email invalide.';e.style.display='block';return;}
-  const id=new URLSearchParams(location.search).get('id')||'';
-  const btn=document.getElementById('btn');
-  btn.disabled=true;btn.textContent='Envoi…';
-  try{
-    await fetch('https://hook.eu1.make.com/31uhf2jsqkfhmvttcb1qwbhgzjhm33bg',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({note,avis,nom,email,clientId:id})});
-    document.getElementById('fv').style.display='none';
-    document.getElementById('sv').style.display='block';
-  }catch{e.textContent='Erreur réseau, réessayez.';e.style.display='block';btn.disabled=false;btn.textContent='Envoyer mon avis →';}
-}
+  stars.forEach(star => {
+    star.addEventListener('mouseover', () => {
+      const v = parseInt(star.dataset.v);
+      stars.forEach(s => s.classList.toggle('hov', parseInt(s.dataset.v) <= v));
+    });
+    star.addEventListener('mouseout', () => stars.forEach(s => s.classList.remove('hov')));
+    star.addEventListener('click', () => {
+      note = parseInt(star.dataset.v);
+      setStars(note);
+      checkForm();
+    });
+  });
+
+  avisEl.addEventListener('input', checkForm);
+
+  function checkForm() {
+    submitBtn.disabled = !(note > 0 && avisEl.value.trim().length > 3);
+  }
+
+  submitBtn.addEventListener('click', async () => {
+    errorMsg.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Envoi en cours…';
+
+    try {
+      const res = await fetch(WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          note,
+          avis: avisEl.value.trim(),
+          nom: document.getElementById('nom').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          clientId
+        })
+      });
+
+      if (!res.ok) throw new Error('Erreur ' + res.status);
+
+      document.getElementById('formArea').style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+    } catch(e) {
+      errorMsg.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+      errorMsg.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Envoyer mon avis';
+    }
+  });
 </script>
 </body>
 </html>
