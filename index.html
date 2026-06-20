@@ -1030,13 +1030,13 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
   }
   function copyEmailTemplate(){
     const id=new URLSearchParams(location.search).get('id')||'VOTRE_ID';
-    const link=`https://trustcollect-landing.vercel.app/collect?id=${id}`;
+    const link=`https://trustcollect-dashboard.vercel.app/collect?id=${id}`;
     const text=`Bonjour [Prénom],\n\nJe me permets de vous contacter suite à notre collaboration.\nVotre retour est très précieux pour moi — pourriez-vous prendre 2 minutes pour laisser un avis ?\n\n👉 ${link}\n\nMerci beaucoup pour votre confiance,\n[Votre prénom]`;
     navigator.clipboard.writeText(text);
   }
   function copySmsTemplate(){
     const id=new URLSearchParams(location.search).get('id')||'VOTRE_ID';
-    const link=`https://trustcollect-landing.vercel.app/collect?id=${id}`;
+    const link=`https://trustcollect-dashboard.vercel.app/collect?id=${id}`;
     const text=`Bonjour [Prénom] 👋 Merci pour votre confiance !\nPourriez-vous laisser un petit avis ici ? Ça prend 1 min :\n${link}`;
     navigator.clipboard.writeText(text);
   }
@@ -1104,7 +1104,7 @@ Pourriez-vous laisser un petit avis ici ? Ça prend 1 min :
       document.getElementById('widget-snippet').textContent=snippet;
 
       // Collect link
-      const collectURL=`https://trustcollect-landing.vercel.app/collect?id=${id}`;
+      const collectURL=`https://trustcollect-dashboard.vercel.app/collect?id=${id}`;
       document.getElementById('collect-link').textContent=collectURL;
       document.getElementById('email-link-placeholder').textContent=collectURL;
       document.getElementById('sms-link-placeholder').textContent=collectURL;
