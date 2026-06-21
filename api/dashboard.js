@@ -22,11 +22,7 @@ module.exports = async function handler(req, res) {
 
         if (!clientRes.ok) {
             const body = await clientRes.json().catch(() => clientRes.text());
-            console.error('[dashboard] Airtable error', clientRes.status, JSON.stringify(body));
-            return res.status(404).json({
-                error: 'Client introuvable',
-                debug: { airtableStatus: clientRes.status, airtableBody: body }
-            });
+            return res.status(404).json({ error: 'Client introuvable', debug: { airtableStatus: clientRes.status, airtableBody: body } });
         }
 
         const clientData = await clientRes.json();
@@ -41,16 +37,24 @@ module.exports = async function handler(req, res) {
                 { headers }
             );
             const avisData = await avisRes.json();
-            avis = (avisData.records || []).map((a) => ({
-                id: a.id,
-                nom: a.fields['Nom du client final'] || 'Anonyme',
-                email: a.fields['Email client final'] || null,
-                note: a.fields['Note'] || null,
-                avis: a.fields['Avis reformulé IA'] || a.fields['Avis brut'] || '',
-                date: a.fields['Date de réception'] || null,
-                statut: a.fields['Statut'] || null,
-                affiche: a.fields['Affiché sur widget'] || false,
-            }));
+            avis = (avisData.records || []).map((a) => {
+                // Gérer les champs IA Airtable qui retournent {state, value} au lieu d'une string
+                const avisAI = a.fields['Avis reformulé IA'];
+                const avisTexte = (avisAI && typeof avisAI === 'string')
+                    ? avisAI
+                    : (a.fields['Avis brut'] || '');
+
+                return {
+                    id: a.id,
+                    nom: a.fields['Nom du client final'] || 'Anonyme',
+                    email: a.fields['Email client final'] || null,
+                    note: a.fields['Note'] || null,
+                    avis: avisTexte,
+                    date: a.fields['Date de réception'] || null,
+                    statut: a.fields['Statut'] || null,
+                    affiche: a.fields['Affiché sur widget'] || false,
+                };
+            });
         }
 
         return res.status(200).json({
